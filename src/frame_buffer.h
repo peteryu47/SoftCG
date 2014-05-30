@@ -51,12 +51,20 @@ public:
 	{
 		int index = ARRAY_INDEX(w, h, m_iWidth) * 3;
 		m_pData[index + 0] = r;
-		m_pData[index + 0] = g;
-		m_pData[index + 0] = b;
+		m_pData[index + 1] = g;
+		m_pData[index + 2] = b;
 	}
-	uchar GetBufferData(int w, int h, uchar *r, uchar *g, uchar *b)
+	void GetBufferData(int w, int h, uchar *r, uchar *g, uchar *b)
 	{
-		return m_pData[ARRAY_INDEX(w, h, m_iWidth)];
+		int index = ARRAY_INDEX(w, h, m_iWidth) * 3;
+		*r = m_pData[index + 0];
+		*g = m_pData[index + 1];
+		*b = m_pData[index + 2];
+	}
+
+	uchar* GetFrameBufferData()
+	{
+		return m_pData;
 	}
 
 protected:

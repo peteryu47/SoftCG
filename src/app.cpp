@@ -25,7 +25,7 @@ App::App(int width, int height)
 
 App::~App()
 {
-
+	SAFE_DELETE(m_pFrameBuffer);
 }
 
 void App::Run()
