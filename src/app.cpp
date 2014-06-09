@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <GLEW\glew.h>
+#include "math/math_3d.h"
 
 #include "frame_buffer.h"
 
