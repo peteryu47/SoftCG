@@ -3,7 +3,8 @@
 
 namespace render
 {
-  class FrameBuffer;
+	class Render;
+	class FrameBuffer;
 }
 
 class App
@@ -17,6 +18,7 @@ public:
   virtual void Update(float delta);
 
 protected:
+	render::Render		*m_pRender;
 	int			m_iWindowWidht;
 	int			m_iWindowHeight;
 };

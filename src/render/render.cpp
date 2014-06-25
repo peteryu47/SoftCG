@@ -36,7 +36,7 @@ void Render::Init()
 
 void Render::Clean()
 {
-	
+	cleanFrameBuffers();
 }
 
 void Render::DrawFrame()
