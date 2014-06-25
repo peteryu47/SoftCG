@@ -1,7 +1,10 @@
 #ifndef __APP_H__
 #define __APP_H__
 
-class FrameBuffer;
+namespace render
+{
+  class FrameBuffer;
+}
 
 class App
 {
@@ -14,7 +17,7 @@ public:
   virtual void Update(float delta);
 
 protected:
-	FrameBuffer *m_pFrameBuffer;
+	render::FrameBuffer *m_pFrameBuffer;
 	int			m_iWindowWidht;
 	int			m_iWindowHeight;
 };

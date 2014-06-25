@@ -40,8 +40,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)..\..\include;$(IncludePath)</IncludePath>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)..\..\include;$(SolutionDir)..\..\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -106,9 +106,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\app.h" />
-    <ClInclude Include="..\..\src\defines.h" />
-    <ClInclude Include="..\..\src\frame_buffer.h" />
-    <ClInclude Include="..\..\src\macro_utils.h" />
+    <ClInclude Include="..\..\src\math\camera.h" />
+    <ClInclude Include="..\..\src\math\math_3d.h" />
+    <ClInclude Include="..\..\src\render\frame_buffer.h" />
+    <ClInclude Include="..\..\src\render\render.h" />
+    <ClInclude Include="..\..\src\utils\defines.h" />
+    <ClInclude Include="..\..\src\utils\macro_utils.h" />
     <ClInclude Include="ChildView.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="Resource.h" />
@@ -118,7 +121,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\app.cpp" />
-    <ClCompile Include="..\..\src\frame_buffer.cpp" />
+    <ClCompile Include="..\..\src\math\camera.cpp" />
+    <ClCompile Include="..\..\src\math\math_3d.cpp" />
+    <ClCompile Include="..\..\src\render\frame_buffer.cpp" />
+    <ClCompile Include="..\..\src\render\render.cpp" />
     <ClCompile Include="ChildView.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="SoftCG.cpp" />

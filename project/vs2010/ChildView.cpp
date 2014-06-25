@@ -160,7 +160,7 @@ int CChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	InitializeOpenGL();
 	glewInit();
-	app = new App();
+	app = new App(600, 600);
 	SetTimer(1, 20, NULL);
 
 	return 0;

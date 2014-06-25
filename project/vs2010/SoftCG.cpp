@@ -83,10 +83,7 @@ BOOL CSoftCGApp::InitInstance()
 		WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, NULL,
 		NULL);
 
-
-
-
-
+  m_pMainWnd->MoveWindow(200, 50, 620, 730);
 
 	// The one and only window has been initialized, so show and update it
 	pFrame->ShowWindow(SW_SHOW);
