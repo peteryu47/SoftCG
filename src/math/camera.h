@@ -9,9 +9,11 @@ public:
 	Camera();
 	~Camera();
 
-	void	LookAt(float eyex, float eyey, float eyez, float upx, float upy, float upz, float px, float py, float pz);
-	void	PerspectiveProj(float angle, float aspect, float zscreen, float znear, float zfar);
-	void 	OrthogonalProjection(float xleft, float xright, float z);
+	void	LookAt(	float eyex, float eyey, float eyez, 
+					float upx, float upy, float upz, 
+					float px, float py, float pz);
+	void	PerspectiveProj(float angle, float aspect, float znear, float zfar);
+	void 	OrthogonalProj(float xleft, float xright, float yup, float ydown);
 
 private:
 	MATRIX4X4_PTR		m_mat_model_;
