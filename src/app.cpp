@@ -1,15 +1,16 @@
 #include "app.h"
 
 #include <assert.h>
-#include <GLEW\glew.h>
-#include "math\math_3d.h"
+#include <GLEW/glew.h>
+#include "math/math_3d.h"
 
-#include "render\frame_buffer.h"
+#include "render/frame_buffer.h"
 
 App::App(int width, int height)
 	:	m_iWindowWidht(width),
 		m_iWindowHeight(height)
 {
+
 }
 
 App::~App()

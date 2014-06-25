@@ -1,7 +1,10 @@
 #ifndef __APP_H__
 #define __APP_H__
 
-class FrameBuffer;
+namespace render
+{
+  class FrameBuffer;
+}
 
 class App
 {
