@@ -14,7 +14,6 @@ public:
   virtual void Update(float delta);
 
 protected:
-	FrameBuffer *m_pFrameBuffer;
 	int			m_iWindowWidht;
 	int			m_iWindowHeight;
 };

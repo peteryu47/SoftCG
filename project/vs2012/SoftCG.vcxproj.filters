@@ -19,6 +19,12 @@
     <Filter Include="src\math">
       <UniqueIdentifier>{f0a14226-8a5b-490c-981d-3651f6b6de70}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{14c9e577-71ae-48f7-aac4-f5d29f3daa75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\render">
+      <UniqueIdentifier>{df6c69a0-c803-43a6-bbd1-b6aaed5370c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -45,17 +51,23 @@
     <ClInclude Include="..\..\src\app.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\defines.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\frame_buffer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\macro_utils.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\math\math_3d.h">
       <Filter>src\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\math\camera.h">
+      <Filter>src\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\render\frame_buffer.h">
+      <Filter>src\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\utils\defines.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\utils\macro_utils.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\render\render.h">
+      <Filter>src\render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -74,11 +86,17 @@
     <ClCompile Include="..\..\src\app.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\frame_buffer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\math\math_3d.cpp">
       <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\camera.cpp">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\render\frame_buffer.cpp">
+      <Filter>src\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\render\render.cpp">
+      <Filter>src\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
