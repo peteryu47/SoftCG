@@ -28,6 +28,9 @@ public:
 // Implementation
 public:
 	virtual ~CMainFrame();
+
+  CMFCStatusBar*  GetStatusBar(){return &m_wndStatusBar;}
+
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

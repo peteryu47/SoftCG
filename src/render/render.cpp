@@ -1,7 +1,12 @@
 #include "render/render.h"
 
+#include <Windows.h>
+
 #include "render/frame_buffer.h"
+#include "render/draw_utils.h"
+
 #include "utils/defines.h"
+#include "utils/random_utils.h"
 
 namespace render
 {
@@ -21,17 +26,6 @@ Render::~Render()
 void Render::Init()
 {
 	initFrameBuffers();
-
-	for(int w = 0; w < m_pSceneFrameBuffer->GetWidth(); ++w)
-	{
-		for(int h = 0; h < m_pSceneFrameBuffer->GetHeight(); ++h)
-		{
-			if(w > h)
-				m_pSceneFrameBuffer->SetBufferDataRGB(w, h, 0, 0, 0);
-			else
-				m_pSceneFrameBuffer->SetBufferDataRGB(w, h, 255, 255, 255);
-		}
-	}
 }
 
 void Render::Clean()
@@ -42,6 +36,24 @@ void Render::Clean()
 void Render::DrawFrame()
 {
 
+  LARGE_INTEGER m_nFreq;
+  LARGE_INTEGER m_nBeginTime;
+  LARGE_INTEGER nEndTime;
+  QueryPerformanceFrequency(&m_nFreq);
+  QueryPerformanceCounter(&m_nBeginTime);
+
+  memset(m_pSceneFrameBuffer->GetFrameBufferData(), 255, sizeof(uchar) * m_pSceneFrameBuffer->GetTotalByteCount());
+  for(int i = 0; i < 100000; ++i)
+  {
+    DrawLineOnFrameBuffer(m_pSceneFrameBuffer, 
+      RandInt(m_iViewPortWidth), RandInt(m_iViewPortHeight), 
+      RandInt(m_iViewPortWidth), RandInt(m_iViewPortHeight), 
+      RandInt(255), RandInt(255), RandInt(255));
+  }
+
+  QueryPerformanceCounter(&nEndTime);
+  LONGLONG ms_time = (nEndTime.QuadPart - m_nBeginTime.QuadPart) * 1000 / m_nFreq.QuadPart;
+  m_fFPS = 1000.0f / ms_time;
 }
 
 void Render::SetModelViewMat( MATRIX4X4_PTR mvMat )
@@ -74,7 +86,7 @@ void Render::initFrameBuffers()
 
 void Render::cleanFrameBuffers()
 {
-	SAFE_DELETE(m_pSceneFrameBuffer);
+  SAFE_DELETE(m_pSceneFrameBuffer);
 	SAFE_DELETE(m_pZFrameBuffer);
 }
 

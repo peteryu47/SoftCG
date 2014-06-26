@@ -19,6 +19,7 @@ public:
 	void			Clean();
 	void			DrawFrame();
 
+  float         GetFPS(){return m_fFPS;}
 	FrameBuffer*	GetCurSceneFrameBuffer(){return m_pSceneFrameBuffer;}
 
 public:
@@ -39,6 +40,8 @@ private:
 
 	int				m_iViewPortWidth;
 	int				m_iViewPortHeight;
+
+  float     m_fFPS;
 };
 
 }

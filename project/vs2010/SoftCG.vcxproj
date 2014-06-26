@@ -108,10 +108,12 @@
     <ClInclude Include="..\..\src\app.h" />
     <ClInclude Include="..\..\src\math\camera.h" />
     <ClInclude Include="..\..\src\math\math_3d.h" />
+    <ClInclude Include="..\..\src\render\draw_utils.h" />
     <ClInclude Include="..\..\src\render\frame_buffer.h" />
     <ClInclude Include="..\..\src\render\render.h" />
     <ClInclude Include="..\..\src\utils\defines.h" />
     <ClInclude Include="..\..\src\utils\macro_utils.h" />
+    <ClInclude Include="..\..\src\utils\random_utils.h" />
     <ClInclude Include="ChildView.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="Resource.h" />

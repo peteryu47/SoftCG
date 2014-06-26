@@ -15,7 +15,8 @@ public:
 
 public:
   void Run();
-  virtual void Update(float delta);
+  virtual void  Update(float delta);
+  float         GetFPS();
 
 protected:
 	render::Render		*m_pRender;
