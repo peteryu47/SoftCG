@@ -43,12 +43,21 @@ void Render::DrawFrame()
   QueryPerformanceCounter(&m_nBeginTime);
 
   memset(m_pSceneFrameBuffer->GetFrameBufferData(), 255, sizeof(uchar) * m_pSceneFrameBuffer->GetTotalByteCount());
-  for(int i = 0; i < 100000; ++i)
+  int left = 100, top = 100, right = 500, bottom = 500;
+  int x0, y0, x1, y1;
+  int new_x0, new_y0, new_x1, new_y1;
+  for(int i = 0; i < 10000; ++i)
   {
-    DrawLineOnFrameBuffer(m_pSceneFrameBuffer, 
-      RandInt(m_iViewPortWidth), RandInt(m_iViewPortHeight), 
-      RandInt(m_iViewPortWidth), RandInt(m_iViewPortHeight), 
-      RandInt(255), RandInt(255), RandInt(255));
+    x0 = RandInt(m_iViewPortWidth);
+    y0 = RandInt(m_iViewPortWidth);
+    x1 = RandInt(m_iViewPortWidth);
+    y1 = RandInt(m_iViewPortWidth);
+    if(ClipLine2DWithRect(x0, y0, x1, y1, left, top, right, bottom, &new_x0, &new_y0, &new_x1, &new_y1))
+    {
+      DrawLineOnFrameBuffer(m_pSceneFrameBuffer, 
+        new_x0, new_y0, new_x1, new_y1, 
+        RandInt(255), RandInt(255), RandInt(255));
+    }
   }
 
   QueryPerformanceCounter(&nEndTime);
