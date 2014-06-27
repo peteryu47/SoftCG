@@ -305,8 +305,8 @@ void  DrawTriangleOnFrameBuffer(FrameBuffer* rgb_buffer, int x0, int y0, int x1,
       if(x0 < x2)
       {
         int x = int(float(x1 - x0) / float(y1 - y0) * float(y2 - y0) + x0 + 0.5);
-        t_x0 = x; t_y0 = y2; t_x1 = x1; t_y1 = y1; t_x2 = x2; t_y2 = y2;
-        x1 = x; y1 = y2;
+        t_x0 = x; t_y0 = y2; t_x1 = x1; t_y1 = y1; t_x2 = x2; t_y2 = y2;  // down
+        x1 = x; y1 = y2;  //up
       }
       //      up
       //      v0            v0
@@ -318,12 +318,19 @@ void  DrawTriangleOnFrameBuffer(FrameBuffer* rgb_buffer, int x0, int y0, int x1,
       else
       {
         int x = int(float(x1 - x0) / float(y1 - y0) * float(y2 - y0) + x0 + 0.5);
-        t_x0 = x2; t_y0 = y2; t_x1 = x1; t_y1 = y1; t_x2 = x; t_y2 = y2;
-        x0 = x2; y0 = y2; x2 = x; y2 = y2;
+        t_x0 = x2; t_y0 = y2; t_x1 = x1; t_y1 = y1; t_x2 = x; t_y2 = y2;  //down
+        x1 = x2; y1 = y2; x2 = x; y2 = y2;  //up
       }
-      need_raster_twice = true;
+      
     }
   }
+
+  need_raster_twice = true;
+  goto RasterizationUpTriangle;
+
+RasterizationTwice:
+  x0 = t_x0; y0 = t_y0; x1 = t_x1; y1 = t_y1; x2 = t_x2; y2 = t_y2; 
+  goto RasterizationDownTriangle;
 
 //   v0 
 // v1  v2
@@ -335,15 +342,18 @@ RasterizationUpTriangle:
     int   xstart_20_int = 0;
     for(int y = y1; y <= y0; ++y)
     {
-      xstart_10 += k_10_inv;
-      xstart_20 += k_20_inv;
-      xstart_20_int = int(xstart_20);
       for(int x = int(xstart_10); x <= xstart_20_int; ++x)
       {
         rgb_buffer->SetBufferDataRGB(x, y, r0, g0, b0);
       }
+      xstart_10 += k_10_inv;
+      xstart_20 += k_20_inv;
+      xstart_20_int = int(xstart_20);
     }
-    return;
+    if(need_raster_twice)
+      goto RasterizationTwice;
+    else
+      return;
   }
 
 //  v0  v2
@@ -356,13 +366,13 @@ RasterizationDownTriangle:
     int   xstart_12_int = 0;
     for(int y = y1; y <= y0; ++y)
     {
-      xstart_10 += k_10_inv;
-      xstart_12 += k_12_inv;
-      xstart_12_int = int(xstart_12);
       for(int x = int(xstart_10); x <= xstart_12_int; ++x)
       {
         rgb_buffer->SetBufferDataRGB(x, y, r0, g0, b0);
       }
+      xstart_10 += k_10_inv;
+      xstart_12 += k_12_inv;
+      xstart_12_int = int(xstart_12);
     }
     return;
   }

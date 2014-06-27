@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "SoftCG.h"
 #include "ChildView.h"
+#include "MainFrm.h"
 
 #include <GLEW\glew.h>
 #include <GLUT\glut.h>
@@ -198,4 +199,10 @@ void CChildView::OnTimer(UINT_PTR nIDEvent)
 	CWnd::OnTimer(nIDEvent);
 	app->Update(0.02);
 	OnPaint();
+
+  CMainFrame *pFrame = (CMainFrame*)AfxGetMainWnd();
+  CString str;
+  str.Format(_T("FPS: %.2f"), app->GetFPS());
+  LPCTSTR re=str.AllocSysString();
+  pFrame->GetStatusBar()->SetPaneText(0, re);
 }
