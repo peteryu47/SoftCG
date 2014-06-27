@@ -95,16 +95,16 @@ void  DrawLineOnFrameBuffer(FrameBuffer* rgb_buffer, int x0, int y0, int x1, int
             |             |
  NW 9 1001  |   N 8 1000  | NE 10 1100        ---------------->x
 --------------------------------------        |
-      W     |             |     E             |   left_top
+      W     |             |     E             |          right_top
       1     |   C 0 0000  |     2             |       -------
      0001   |             |    0010           |       |     |
 --------------------------------------        |       |     |
  SW 5 0101  |   S 4 0100  | SE 6 0110         |       ------- 
-            |             |                   y             right_bottom
+            |             |                   y    left_bottom       
 */
 
-bool ClipLine2DWithRect(int x0, int y0, int x1, int y1, int left, int top,
-  int right, int bottom, int *result_x0, int *result_y0, int *result_x1, int *result_y1)
+bool ClipLine2DWithRect(int x0, int y0, int x1, int y1, int left, int bottom,
+  int right, int top, int *result_x0, int *result_y0, int *result_x1, int *result_y1)
 {
   if(x0 == x1 && y0 == y1)
     return false;
@@ -116,18 +116,18 @@ bool ClipLine2DWithRect(int x0, int y0, int x1, int y1, int left, int top,
     code0 |= C_W;
   if(x0 > right)
     code0 |= C_E;
-  if(y0 > bottom)
+  if(y0 < bottom)
     code0 |= C_S;
-  if(y0 < top)
+  if(y0 > top)
     code0 |= C_N;
 
   if(x1 < left)
     code1 |= C_W;
   if(x1 > right)
     code1 |= C_E;
-  if(y1 > bottom)
+  if(y1 < bottom)
     code1 |= C_S;
-  if(y1 < top)
+  if(y1 > top)
     code1 |= C_N;
 
   // same side
@@ -237,9 +237,135 @@ bool ClipLine2DWithRect(int x0, int y0, int x1, int y1, int left, int top,
   return true;
 }
 
+#define C_SWAP(x, y, t)   t = x; x = y; y = t
+
 void  DrawTriangleOnFrameBuffer(FrameBuffer* rgb_buffer, int x0, int y0, int x1, int y1, int x2, int y2,
   int r0, int g0, int b0, int r1, int g1, int b1, int r2, int g2, int b2)
 {
+  int   t = 0;
+  int   t_x0, t_y0, t_x1, t_y1, t_x2, t_y2;
+  bool  need_raster_twice = false;
+  // make v1 is the bottom vertex
+  if(y1 > y0)
+  {
+    C_SWAP(x1, x0, t);  C_SWAP(y1, y0, t);
+  }
+  if(y1 > y2)
+  {
+    C_SWAP(x1, x2, t);  C_SWAP(y1, y2, t);
+  }
+
+  //  down
+  //  v0  v2
+  //    v1
+  if(y0 == y2)
+  {
+    // v2   v0
+    //    v1
+    if(x2 < x0)
+    {
+      C_SWAP(x2, x0, t);  C_SWAP(y2, y0, t);
+    }
+    goto RasterizationDownTriangle;
+  }
+  else
+  {
+    //   up
+    //   v0 
+    // v1  v2
+    if(y1 == y2)
+    {
+      //   v2 
+      // v1  v0
+      if(x1 > x2)
+      {
+        C_SWAP(x1, x2, t);  C_SWAP(y1, y2, t);
+      }
+      if(y2 > y0)
+      {
+        C_SWAP(x2, x0, t);  C_SWAP(y2, y0, t);
+      }
+
+      goto RasterizationUpTriangle;
+    }
+    else
+    {
+      if(y0 < y2)
+      {
+        C_SWAP(x0, x2, t);  C_SWAP(y0, y2, t);
+      }
+
+      //    up
+      //    v0            v0
+      //
+      //        v2      v1    v2     
+      //  v1            v0    v2
+      //  
+      //               v1
+      if(x0 < x2)
+      {
+        int x = int(float(x1 - x0) / float(y1 - y0) * float(y2 - y0) + x0 + 0.5);
+        t_x0 = x; t_y0 = y2; t_x1 = x1; t_y1 = y1; t_x2 = x2; t_y2 = y2;
+        x1 = x; y1 = y2;
+      }
+      //      up
+      //      v0            v0
+      //
+      //  v2            v1     v2
+      //        v1      v0     v2
+      //
+      //                         v1
+      else
+      {
+        int x = int(float(x1 - x0) / float(y1 - y0) * float(y2 - y0) + x0 + 0.5);
+        t_x0 = x2; t_y0 = y2; t_x1 = x1; t_y1 = y1; t_x2 = x; t_y2 = y2;
+        x0 = x2; y0 = y2; x2 = x; y2 = y2;
+      }
+      need_raster_twice = true;
+    }
+  }
+
+//   v0 
+// v1  v2
+RasterizationUpTriangle:
+  {
+    float k_10_inv = float(x0 - x1) / float(y0 - y1);
+    float k_20_inv = float(x0 - x2) / float(y0 - y2);
+    float xstart_10 = x1, xstart_20 = x2;
+    int   xstart_20_int = 0;
+    for(int y = y1; y <= y0; ++y)
+    {
+      xstart_10 += k_10_inv;
+      xstart_20 += k_20_inv;
+      xstart_20_int = int(xstart_20);
+      for(int x = int(xstart_10); x <= xstart_20_int; ++x)
+      {
+        rgb_buffer->SetBufferDataRGB(x, y, r0, g0, b0);
+      }
+    }
+    return;
+  }
+
+//  v0  v2
+//    v1
+RasterizationDownTriangle:
+  {
+    float k_10_inv = float(x0 - x1) / float(y0 - y1);
+    float k_12_inv = float(x2 - x1) / float(y2 - y1);
+    float xstart_10 = x1, xstart_12 = x1;
+    int   xstart_12_int = 0;
+    for(int y = y1; y <= y0; ++y)
+    {
+      xstart_10 += k_10_inv;
+      xstart_12 += k_12_inv;
+      xstart_12_int = int(xstart_12);
+      for(int x = int(xstart_10); x <= xstart_12_int; ++x)
+      {
+        rgb_buffer->SetBufferDataRGB(x, y, r0, g0, b0);
+      }
+    }
+    return;
+  }
 
 }
 
