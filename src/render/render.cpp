@@ -60,7 +60,7 @@ void Render::DrawFrame()
     //    RandInt(255), RandInt(255), RandInt(255));
     //}
     
-    DrawTriangleOnFrameBuffer(m_pSceneFrameBuffer, 100, 100, 200, 200, 250, 50, 0, 0, 0);
+    DrawTriangleOnFrameBuffer(m_pSceneFrameBuffer, 100, 100, 200, 200, 250, 50, 255, 0, 0, 0, 255, 0, 0, 0, 255);
     //DrawLineOnFrameBuffer(m_pSceneFrameBuffer, 100, 100, 200, 150, 0, 0, 0);
     //m_pSceneFrameBuffer->SetBufferDataRGB(100, 200, 0, 0, 0);
   }
