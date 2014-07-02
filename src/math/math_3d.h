@@ -356,10 +356,10 @@ inline void POINT4D_COPY(POINT4D_PTR vdest, POINT4D_PTR vsrc)
 #define MAT_ZERO_4X4(m)		{memset((void*)m, 0, sizeof(MATRIX4X4))}
 #define MAT_ZERO_4X3(m)		{memset((void*)m, 0, sizeof(MATRIX4X3))}
 
-#define MAT_IDENTITY_2X2(m)	{memcpy((void*)m, (void*)IMAT_2X2, sizeof(MATRIX2X2));}
-#define MAT_IDENTITY_3X3(m)	{memcpy((void*)m, (void*)IMAT_3X3, sizeof(MATRIX3X3));}
-#define MAT_IDENTITY_4X4(m)	{memcpy((void*)m, (void*)IMAT_4X4, sizeof(MATRIX4X4));}
-#define MAT_IDENTITY_4X3(m)	{memcpy((void*)m, (void*)IMAT_4X3, sizeof(MATRIX4X3));}
+#define MAT_IDENTITY_2X2(m)	{memcpy((void*)m, (void*)&IMAT_2X2, sizeof(MATRIX2X2));}
+#define MAT_IDENTITY_3X3(m)	{memcpy((void*)m, (void*)&IMAT_3X3, sizeof(MATRIX3X3));}
+#define MAT_IDENTITY_4X4(m)	{memcpy((void*)m, (void*)&IMAT_4X4, sizeof(MATRIX4X4));}
+#define MAT_IDENTITY_4X3(m)	{memcpy((void*)m, (void*)&IMAT_4X3, sizeof(MATRIX4X3));}
 
 #define MAT_COPY_2X2(src_mat, dest_mat)		{memcpy((void*)dest_mat, (void*)src_mat, sizeof(MATRIX2X2));}
 #define MAT_COPY_3X3(src_mat, dest_mat)		{memcpy((void*)dest_mat, (void*)src_mat, sizeof(MATRIX3X3));}
@@ -579,6 +579,10 @@ void Compute_Parm_Lines3D(PARMLINE3D_PTR p, float t, POINT3D_PTR pt);
 void PLANE3D_Init(PLANE3D_PTR plane, POINT3D_PTR p0, VECTOR3D_PTR normal, int normalize = 0);
 float Compute_Point_In_Plane3D(POINT3D_PTR p0, PLANE3D_PTR plane);
 int Intersect_Parm_Line3D_Plane3D(PARMLINE3D_PTR pline, PLANE3D_PTR plane, float *t, POINT3D_PTR pt);
+
+#define PI      3.141592654f
+#define R2A(r)  ((r) * 57.29578049044297f)
+#define A2R(a)  ((a) * 0.017453292222222f)
 
 extern float cos_look[361];
 extern float sin_look[361];

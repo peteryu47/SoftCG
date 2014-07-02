@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include "math/math_3d.h"
+#include "math/camera.h"
 
 namespace render
 {
@@ -15,16 +16,14 @@ public:
 	Render();
 	~Render();
 
-	void			Init();
-	void			Clean();
-	void			DrawFrame();
+	void			    Init();
+	void			    Clean();
+	void			    DrawFrame();
 
   float         GetFPS(){return m_fFPS;}
 	FrameBuffer*	GetCurSceneFrameBuffer(){return m_pSceneFrameBuffer;}
 
 public:
-	void			SetModelViewMat(MATRIX4X4_PTR mvMat);
-	void			SetProjectionMat(MATRIX4X4_PTR pMat);
 	void			SetViewPortSize(int width, int height);
 
 protected:
@@ -35,13 +34,12 @@ private:
 	FrameBuffer		*m_pSceneFrameBuffer;
 	FrameBuffer		*m_pZFrameBuffer;
 
-	MATRIX4X4		m_matModelView;
-	MATRIX4X4		m_matProjection;
-
 	int				m_iViewPortWidth;
 	int				m_iViewPortHeight;
 
   float     m_fFPS;
+
+  Camera    m_camera;
 };
 
 }

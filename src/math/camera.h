@@ -10,11 +10,14 @@ public:
 	~Camera();
 
 	void	LookAt(	float eyex, float eyey, float eyez, 
-					float upx, float upy, float upz, 
-					float px, float py, float pz);
+					      float upx, float upy, float upz, 
+					      float px, float py, float pz);
+  void 	PerspectiveProj(float xleft, float xright, float ytop, float ybuttom, float znear, float zfar);
 	void	PerspectiveProj(float angle, float aspect, float znear, float zfar);
-	void 	OrthogonalProj(float xleft, float xright, float yup, float ydown);
+	void 	OrthogonalProj(float xleft, float xright, float ytop, float ybuttom, float znear, float zfar);
 
+  void          ResetViewMat();
+  void          ResetProjMat();
 	MATRIX4X4_PTR	GetViewMat(){return &m_mat_view_;}
   MATRIX4X4_PTR	GetProjMat(){return &m_mat_proj_;}
 	MATRIX4X4_PTR GetViewProjMat(){return &m_mat_view_proj_;}
