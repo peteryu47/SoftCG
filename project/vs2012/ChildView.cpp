@@ -10,6 +10,20 @@
 #include <GLEW\glew.h>
 #include <GLUT\glut.h>
 
+#include <io.h>
+#include <fcntl.h>
+
+void InitConsole()
+{
+  int nRet= 0;
+  FILE* fp;
+  AllocConsole();
+  nRet= _open_osfhandle((long)GetStdHandle(STD_OUTPUT_HANDLE), _O_TEXT);
+  fp = _fdopen(nRet, "w");
+  *stdout = *fp;
+  setvbuf(stdout, NULL, _IONBF, 0);
+}
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -159,6 +173,7 @@ int CChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
+  InitConsole();
 	InitializeOpenGL();
 	glewInit();
 	app = new App(600, 600);

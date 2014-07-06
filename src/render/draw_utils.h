@@ -3,6 +3,7 @@
 
 #include <assert.h>
 
+#include <stdio.h>
 #include "utils/defines.h"
 #include "utils/macro_utils.h"
 #include "render/frame_buffer.h"
@@ -240,11 +241,11 @@ bool ClipLine2DWithRect(int x0, int y0, int x1, int y1, int left, int bottom,
 #define C_SWAP(x, y, t)   t = x; x = y; y = t
 
 void  DrawTriangleOnFrameBuffer(FrameBuffer* rgb_buffer, 
-  int x0, int y0, int x1, int y1, int x2, int y2,
+  float x0, float y0, float x1, float y1, float x2, float y2,
   int r0, int g0, int b0, int r1, int g1, int b1, int r2, int g2, int b2)
 {
-  int   t = 0;
-  int   t_x0, t_y0, t_x1, t_y1, t_x2, t_y2;
+  float t = 0;
+  float t_x0, t_y0, t_x1, t_y1, t_x2, t_y2;
   int   t_r0, t_g0, t_b0, t_r1, t_g1, t_b1, t_r2, t_g2, t_b2;
   bool  need_raster_twice = false;
   // make v1 is the bottom vertex
@@ -312,14 +313,15 @@ void  DrawTriangleOnFrameBuffer(FrameBuffer* rgb_buffer,
       //               v1
       if(x0 < x2)
       {
-        int x = int(float(x1 - x0) / float(y1 - y0) * float(y2 - y0) + x0 + 0.5);
+        float x = (float(x1 - x0) / float(y1 - y0) * float(y2 - y0) + x0);
+        float len_factor = float(y2 - y0) / float(y1 - y0);
+
         t_x0 = x; t_y0 = y2; t_x1 = x1; t_y1 = y1; t_x2 = x2; t_y2 = y2;  // down
         x1 = x; y1 = y2;  //up
 
-        float color_factor = float((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0)) / float((x - x0) * (x - x0) + (y2 - y0) * (y2 - y0));
-        t_r0 = (r1 - r0) * color_factor + r0;
-        t_g0 = (g1 - g0) * color_factor + g0;
-        t_b0 = (b1 - b0) * color_factor + b0;
+        t_r0 = (r1 - r0) * len_factor + r0;
+        t_g0 = (g1 - g0) * len_factor + g0;
+        t_b0 = (b1 - b0) * len_factor + b0;
         t_r1 = r1; t_g1 = g1; t_b1 = b1;
         t_r2 = r2; t_g2 = g2; t_b2 = b2;
 
@@ -334,16 +336,16 @@ void  DrawTriangleOnFrameBuffer(FrameBuffer* rgb_buffer,
       //                         v1
       else
       {
-        int x = int(float(x1 - x0) / float(y1 - y0) * float(y2 - y0) + x0 + 0.5);
+        float x = (float(x1 - x0) / float(y1 - y0) * float(y2 - y0) + x0);
+        float len_factor = float(y2 - y0) / float(y1 - y0);
         t_x0 = x2; t_y0 = y2; t_x1 = x1; t_y1 = y1; t_x2 = x; t_y2 = y2;  //down
         x1 = x2; y1 = y2; x2 = x; y2 = y2;  //up
 
-        float color_factor = float((t_x2 - x0) * (t_x2 - x0) + (y2 - y0) * (y2 - y0)) / float((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0));
         t_r0 = r2; t_g0 = g2; t_b0 = b2;
         t_r1 = r1; t_g1 = g1; t_b1 = b1;
-        t_r2 = (r1 - r0) * color_factor + r0;
-        t_g2 = (g1 - g0) * color_factor + g0;
-        t_b2 = (b1 - b0) * color_factor + b0;
+        t_r2 = (r1 - r0) * len_factor + r0;
+        t_g2 = (g1 - g0) * len_factor + g0;
+        t_b2 = (b1 - b0) * len_factor + b0;
 
         r1 = r2; g1 = g2; b1 = b2;
         r2 = t_r2; g2 = t_g2; b2 = t_b2;
@@ -366,10 +368,11 @@ RasterizationTwice:
 // v1  v2
 RasterizationUpTriangle:
   {
+    printf("\n-------------------Up-------------------\n");
     float k_10_inv = float(x0 - x1) / float(y0 - y1);
     float k_20_inv = float(x0 - x2) / float(y0 - y2);
     float xstart_10 = x1, xstart_20 = x2;
-    int   xstart_20_int = 0;
+    int   xstart_20_int = int(xstart_20);
 
     float step_10_r = float(r0 - r1) / float(y0 - y1);
     float step_10_g = float(g0 - g1) / float(y0 - y1);
@@ -383,20 +386,21 @@ RasterizationUpTriangle:
 
     float temp_rstart, temp_gstart, temp_bstart;
     float temp_step_r, temp_step_g, temp_step_b;
-    float x_20_10_inv =  1.0f / (xstart_20 - xstart_10);
+    float x_20_10_inv;
 
     for(int y = y1; y <= y0; ++y)
     {
+      x_20_10_inv =  1.0f / (xstart_20 - xstart_10);
       temp_step_r = (rstart_20 - rstart_10) * x_20_10_inv;
       temp_step_g = (gstart_20 - gstart_10) * x_20_10_inv;
       temp_step_b = (bstart_20 - bstart_10) * x_20_10_inv;
       temp_rstart = rstart_10;
       temp_gstart = gstart_10;
       temp_bstart = bstart_10;
-
+      printf("%f, %f,  %f %f %f\n", xstart_10, xstart_20, temp_rstart, temp_gstart, temp_bstart);
       for(int x = int(xstart_10); x <= xstart_20_int; ++x)
       {
-        rgb_buffer->SetBufferDataRGB(x, y, int(temp_rstart), int(temp_gstart), int(temp_bstart));
+        rgb_buffer->SetBufferDataRGB(int(x + 0.5), int(y + 0.5), int(temp_rstart), int(temp_gstart), int(temp_bstart));
 
         temp_rstart += temp_step_r;
         temp_gstart += temp_step_g;
@@ -424,10 +428,11 @@ RasterizationUpTriangle:
 //    v1
 RasterizationDownTriangle:
   {
+    printf("\n-------------------Down-------------------\n");
     float k_10_inv = float(x0 - x1) / float(y0 - y1);
     float k_12_inv = float(x2 - x1) / float(y2 - y1);
     float xstart_10 = x1, xstart_12 = x1;
-    int   xstart_12_int = 0;
+    int   xstart_12_int = int(xstart_12);
 
     float step_10_r = float(r0 - r1) / float(y0 - y1);
     float step_10_g = float(g0 - g1) / float(y0 - y1);
@@ -441,20 +446,21 @@ RasterizationDownTriangle:
 
     float temp_rstart, temp_gstart, temp_bstart;
     float temp_step_r, temp_step_g, temp_step_b;
-    float x_12_10_inv = 1.0f / (xstart_12 - xstart_10);
+    float x_12_10_inv;
 
     for(int y = y1; y <= y0; ++y)
     {
+      x_12_10_inv = 1.0f / (xstart_12 - xstart_10);
       temp_step_r = (rstart_12 - rstart_10) / (xstart_12 - xstart_10);
       temp_step_g = (gstart_12 - gstart_10) / (xstart_12 - xstart_10);
       temp_step_b = (bstart_12 - bstart_10) / (xstart_12 - xstart_10);
       temp_rstart = rstart_10;
       temp_gstart = gstart_10;
       temp_bstart = bstart_10;
-
+      printf("%f, %f,  %f %f %f\n", xstart_10, xstart_12, temp_rstart, temp_gstart, temp_bstart);
       for(int x = int(xstart_10); x <= xstart_12_int; ++x)
       {   
-        rgb_buffer->SetBufferDataRGB(x, y, int(temp_rstart), int(temp_gstart), int(temp_bstart));
+        rgb_buffer->SetBufferDataRGB(int(x + 0.5), int(y + 0.5), int(temp_rstart), int(temp_gstart), int(temp_bstart));
 
         temp_rstart += temp_step_r;
         temp_gstart += temp_step_g;

@@ -107,6 +107,7 @@ void Render::DrawFrame()
 
   VECTOR4D p0, p1, p2;
   VECTOR4D rp0, rp1, rp2;
+  
   for(int i = 0; i < 2; ++i)
   {
     p0.x = vertexs[indexes[i][0]][0]; p0.y = vertexs[indexes[i][0]][1]; p0.z = vertexs[indexes[i][0]][2]; p0.w = 1;
@@ -129,7 +130,24 @@ void Render::DrawFrame()
       colors[indexes[i][1]][0], colors[indexes[i][1]][1], colors[indexes[i][1]][2],
       colors[indexes[i][2]][0], colors[indexes[i][2]][1], colors[indexes[i][2]][2]);
   }
-
+  
+  /*
+  DrawTriangleOnFrameBuffer(m_pSceneFrameBuffer, 
+    300, 500, 
+    500, 300, 
+    300, 100, 
+    255, 0, 0,
+    255, 255, 255,
+    0, 0, 255);
+  
+  DrawTriangleOnFrameBuffer(m_pSceneFrameBuffer, 
+    300, 500, 
+    100, 300, 
+    300, 100, 
+    255, 0, 0,
+    0, 255, 0,
+    0, 0, 255);
+   */
   QueryPerformanceCounter(&nEndTime);
   LONGLONG ms_time = (nEndTime.QuadPart - m_nBeginTime.QuadPart) * 1000 / m_nFreq.QuadPart;
   m_fFPS = 1000.0f / ms_time;
@@ -146,7 +164,7 @@ void Render::SetViewPortSize( int width, int height )
 		initFrameBuffers();
 	}
   m_camera.ResetViewMat();
-  m_camera.LookAt(2, 4, 2, 0, 1, 0, 0, 0, 0);
+  m_camera.LookAt(2, 2, 2, 0, 1, 0, 0, 0, 0);
   m_camera.ResetProjMat();
   m_camera.PerspectiveProj(90, 1, 1.414, 10);
 }
