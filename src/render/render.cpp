@@ -11,7 +11,7 @@
 namespace render
 {
 
-render::Render::Render()
+Render::Render()
 	:	m_iViewPortWidth(WINDOW_WIDTH),
 		m_iViewPortHeight(WINDOW_HEIGHT)
 {
@@ -81,6 +81,7 @@ void Render::DrawFrame()
   QueryPerformanceCounter(&m_nBeginTime);
 
   memset(m_pSceneFrameBuffer->GetFrameBufferData(), 255, sizeof(uchar) * m_pSceneFrameBuffer->GetTotalByteCount());
+  memset(m_pZFrameBuffer->GetFrameBufferDataFloat(), 0, sizeof(float) * m_pZFrameBuffer->GetTotalByteCount());
   /*
   int left = 100, bottom = 100, right = 300, top = 300;
   int x0, y0, x1, y1;
@@ -108,7 +109,7 @@ void Render::DrawFrame()
   VECTOR4D p0, p1, p2;
   VECTOR4D rp0, rp1, rp2;
   
-  for(int i = 0; i < 2; ++i)
+  for(int i = 0; i < 12; ++i)
   {
     p0.x = vertexs[indexes[i][0]][0]; p0.y = vertexs[indexes[i][0]][1]; p0.z = vertexs[indexes[i][0]][2]; p0.w = 1;
     p1.x = vertexs[indexes[i][1]][0]; p1.y = vertexs[indexes[i][1]][1]; p1.z = vertexs[indexes[i][1]][2]; p1.w = 1;
@@ -125,7 +126,12 @@ void Render::DrawFrame()
     rp0.x = (rp0.x + 1) * m_iViewPortWidth / 2.0f; rp0.y = (rp0.y + 1) * m_iViewPortHeight / 2.0f;
     rp1.x = (rp1.x + 1) * m_iViewPortWidth / 2.0f; rp1.y = (rp1.y + 1) * m_iViewPortHeight / 2.0f;
     rp2.x = (rp2.x + 1) * m_iViewPortWidth / 2.0f; rp2.y = (rp2.y + 1) * m_iViewPortHeight / 2.0f;
-    DrawTriangleOnFrameBuffer(m_pSceneFrameBuffer, rp0.x, rp0.y, rp1.x, rp1.y, rp2.x, rp2.y, 
+    //DrawTriangleOnFrameBuffer(m_pSceneFrameBuffer, rp0.x, rp0.y, rp1.x, rp1.y, rp2.x, rp2.y, 
+    //  colors[indexes[i][0]][0], colors[indexes[i][0]][1], colors[indexes[i][0]][2],
+    //  colors[indexes[i][1]][0], colors[indexes[i][1]][1], colors[indexes[i][1]][2],
+    //  colors[indexes[i][2]][0], colors[indexes[i][2]][1], colors[indexes[i][2]][2]);
+    DrawTriangleOnFrameBufferWithZBuffer(m_pSceneFrameBuffer, m_pZFrameBuffer,
+      rp0.x, rp0.y, rp0.z, rp1.x, rp1.y, rp1.z, rp2.x, rp2.y, rp2.z, 
       colors[indexes[i][0]][0], colors[indexes[i][0]][1], colors[indexes[i][0]][2],
       colors[indexes[i][1]][0], colors[indexes[i][1]][1], colors[indexes[i][1]][2],
       colors[indexes[i][2]][0], colors[indexes[i][2]][1], colors[indexes[i][2]][2]);
