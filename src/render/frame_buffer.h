@@ -69,10 +69,6 @@ public:
 		m_pData[index + 0] = r;
 		m_pData[index + 1] = g;
 		m_pData[index + 2] = b;
-    if(r == 1 && g == 254 && b == 255)
-    {
-      r = 0;
-    }
 	}
 	void  GetBufferDataRGB(int w, int h, uchar *r, uchar *g, uchar *b)
 	{

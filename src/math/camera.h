@@ -26,6 +26,11 @@ private:
 	MATRIX4X4		m_mat_view_;
 	MATRIX4X4		m_mat_proj_;
 	MATRIX4X4   m_mat_view_proj_;
+  POINT3D     m_point_eye_;
+  POINT3D     m_point_view_;
+  VECTOR3D    m_vec_up_;
+  float       m_fznear_;
+  float       m_fangle_2_;
 };
 
 #endif

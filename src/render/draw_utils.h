@@ -622,23 +622,23 @@ RasterizationTwice:
   // v1  v2
 RasterizationUpTriangle:
   {
-    float k_10_inv = float(x0 - x1) / float(y0 - y1);
-    float k_20_inv = float(x0 - x2) / float(y0 - y2);
+    float k_10_inv = float(x0 - x1) / float(int(y0) - int(y1));
+    float k_20_inv = float(x0 - x2) / float(int(y0) - int(y2));
     float xstart_10 = x1, xstart_20 = x2;
     int   xstart_20_int = int(xstart_20);
 
     float zstart_10 = z1, zstart_20 = z2;
-    float step_10_z = (z0 - z1) / (y0 - y1);
-    float step_20_z = (z0 - z2) / (y0 - y1);
+    float step_10_z = (z0 - z1) / (int(y0) - int(y1));
+    float step_20_z = (z0 - z2) / (int(y0) - int(y1));
 
-    float step_10_r = float(r0 - r1) / float(y0 - y1);
-    float step_10_g = float(g0 - g1) / float(y0 - y1);
-    float step_10_b = float(b0 - b1) / float(y0 - y1);
+    float step_10_r = float(r0 - r1) / float(int(y0) - int(y1));
+    float step_10_g = float(g0 - g1) / float(int(y0) - int(y1));
+    float step_10_b = float(b0 - b1) / float(int(y0) - int(y1));
     float rstart_10 = r1, gstart_10 = g1, bstart_10 = b1;
 
-    float step_20_r = float(r0 - r2) / float(y0 - y1);
-    float step_20_g = float(g0 - g2) / float(y0 - y1);
-    float step_20_b = float(b0 - b2) / float(y0 - y1);
+    float step_20_r = float(r0 - r2) / float(int(y0) - int(y1));
+    float step_20_g = float(g0 - g2) / float(int(y0) - int(y1));
+    float step_20_b = float(b0 - b2) / float(int(y0) - int(y1));
     float rstart_20 = r2, gstart_20 = g2, bstart_20 = b2;
 
     float temp_rstart, temp_gstart, temp_bstart;
@@ -650,7 +650,7 @@ RasterizationUpTriangle:
 
     for(int y = y1; y <= y0; ++y)
     {
-      x_20_10_inv =  1.0f / (xstart_20 - xstart_10 + 1);
+      x_20_10_inv =  1.0f / (int(xstart_20) - int(xstart_10) + 1);
       temp_step_r = (rstart_20 - rstart_10) * x_20_10_inv;
       temp_step_g = (gstart_20 - gstart_10) * x_20_10_inv;
       temp_step_b = (bstart_20 - bstart_10) * x_20_10_inv;
@@ -701,23 +701,23 @@ RasterizationUpTriangle:
   //    v1
 RasterizationDownTriangle:
   {
-    float k_10_inv = float(x0 - x1) / float(y0 - y1);
-    float k_12_inv = float(x2 - x1) / float(y2 - y1);
+    float k_10_inv = float(x0 - x1) / float(int(y0) - int(y1));
+    float k_12_inv = float(x2 - x1) / float(int(y2) - int(y1));
     float xstart_10 = x1, xstart_12 = x1;
     int   xstart_12_int = int(xstart_12);
 
     float zstart_10 = z1, zstart_12 = z1;
-    float step_10_z = (z0 - z1) / (y0 - y1);
-    float step_12_z = (z2 - z1) / (y0 - y1);
+    float step_10_z = (z0 - z1) / (int(y0) - int(y1));
+    float step_12_z = (z2 - z1) / (int(y0) - int(y1));
 
-    float step_10_r = float(r0 - r1) / float(y0 - y1);
-    float step_10_g = float(g0 - g1) / float(y0 - y1);
-    float step_10_b = float(b0 - b1) / float(y0 - y1);
+    float step_10_r = float(r0 - r1) / float(int(y0) - int(y1));
+    float step_10_g = float(g0 - g1) / float(int(y0) - int(y1));
+    float step_10_b = float(b0 - b1) / float(int(y0) - int(y1));
     float rstart_10 = r1, gstart_10 = g1, bstart_10 = b1;
 
-    float step_12_r = float(r2 - r1) / float(y0 - y1);
-    float step_12_g = float(g2 - g1) / float(y0 - y1);
-    float step_12_b = float(b2 - b1) / float(y0 - y1);
+    float step_12_r = float(r2 - r1) / float(int(y0) - int(y1));
+    float step_12_g = float(g2 - g1) / float(int(y0) - int(y1));
+    float step_12_b = float(b2 - b1) / float(int(y0) - int(y1));
     float rstart_12 = r1, gstart_12 = g1, bstart_12 = b1;
 
     float temp_rstart, temp_gstart, temp_bstart;
@@ -730,7 +730,7 @@ RasterizationDownTriangle:
     for(int y = y1; y <= y0; ++y)
     {
 
-      x_12_10_inv = 1.0f / (xstart_12 - xstart_10 + 1);
+      x_12_10_inv = 1.0f / (int(xstart_12) - int(xstart_10) + 1);
       temp_step_r = (rstart_12 - rstart_10) * x_12_10_inv;
       temp_step_g = (gstart_12 - gstart_10) * x_12_10_inv;
       temp_step_b = (bstart_12 - bstart_10) * x_12_10_inv;
