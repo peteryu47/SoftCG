@@ -9,4 +9,8 @@
 
 #define ARRAY_INDEX(w, h, width) ((h) * (width) + (w))
 
+#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
+  TypeName(const TypeName&);\
+  void operator=(const TypeName&)
+
 #endif

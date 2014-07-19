@@ -580,7 +580,6 @@ void PLANE3D_Init(PLANE3D_PTR plane, POINT3D_PTR p0, VECTOR3D_PTR normal, int no
 float Compute_Point_In_Plane3D(POINT3D_PTR p0, PLANE3D_PTR plane);
 int Intersect_Parm_Line3D_Plane3D(PARMLINE3D_PTR pline, PLANE3D_PTR plane, float *t, POINT3D_PTR pt);
 
-#define PI      3.141592654f
 #define R2A(r)  ((r) * 57.29578049044297f)
 #define A2R(a)  ((a) * 0.017453292222222f)
 

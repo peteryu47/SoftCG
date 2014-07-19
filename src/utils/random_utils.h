@@ -5,19 +5,19 @@
 #include <stdlib.h>
 
 // [0, up)
-int RandInt(int up)
+static int RandInt(int up)
 {
   return (rand() % up);
 }
 
 // [down, up)
-int RandIntSection(int down, int up)
+static int RandIntSection(int down, int up)
 {
   return RandInt(up - down) + down;
 }
 
 // [0, 1)
-float RandFloat()
+static float RandFloat()
 {
   return ((rand() % 1234567) / 1234567.0f);
 }
