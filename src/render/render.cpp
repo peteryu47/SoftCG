@@ -7,6 +7,8 @@
 
 #include "utils/defines.h"
 #include "utils/random_utils.h"
+#include "render/vertex_data_cache.h"
+#include "render/raster.h"
 
 namespace render
 {
@@ -33,55 +35,8 @@ void Render::Clean()
 	cleanFrameBuffers();
 }
 
-const float vertexs[8][3] = {
-  { 1,  1,  1},   //0
-  {-1,  1,  1},   //1
-  {-1,  1, -1},   //2
-  { 1,  1, -1},   //3
-  { 1, -1,  1},   //4
-  {-1, -1,  1},   //5
-  {-1, -1, -1},   //6
-  { 1, -1, -1}    //7
-};
-
-const float colors[8][3] = {
-  {255,   0,   0},   //0
-  {  0, 255,   0},   //1
-  {  0,   0, 255},   //2
-  {255, 255, 255},   //3
-  {  0,   0,   0},   //4
-  {255, 255,   0},   //5
-  {255,   0, 255},   //6
-  {  0, 255, 255}    //7
-};
-
-const int indexes[12][3] = 
+void Render::DrawTriangle(int count)
 {
-  {0, 1, 2},
-  {0, 2, 3},  //up
-  {4, 7, 6},
-  {4, 6, 5},  //down
-  {3, 2, 6},
-  {3, 6, 7},  //font
-  {0, 4, 5},
-  {0, 5, 1},  //back
-  {0, 3, 7},
-  {0, 7, 4},  //right
-  {2, 1, 5},
-  {2, 5, 6}   //left
-};
-
-void Render::DrawFrame()
-{
-
-  LARGE_INTEGER m_nFreq;
-  LARGE_INTEGER m_nBeginTime;
-  LARGE_INTEGER nEndTime;
-  QueryPerformanceFrequency(&m_nFreq);
-  QueryPerformanceCounter(&m_nBeginTime);
-
-  memset(m_pSceneFrameBuffer->GetFrameBufferData(), 255, sizeof(uchar) * m_pSceneFrameBuffer->GetTotalByteCount());
-  memset(m_pZFrameBuffer->GetFrameBufferDataFloat(), 0, sizeof(float) * m_pZFrameBuffer->GetTotalByteCount());
   /*
   int left = 100, bottom = 100, right = 300, top = 300;
   int x0, y0, x1, y1;
@@ -105,7 +60,7 @@ void Render::DrawFrame()
     //m_pSceneFrameBuffer->SetBufferDataRGB(100, 200, 0, 0, 0);
   }
   */
-
+  /*
   VECTOR4D p0, p1, p2;
   VECTOR4D rp0, rp1, rp2;
   
@@ -136,7 +91,7 @@ void Render::DrawFrame()
       colors[indexes[i][1]][0], colors[indexes[i][1]][1], colors[indexes[i][1]][2],
       colors[indexes[i][2]][0], colors[indexes[i][2]][1], colors[indexes[i][2]][2]);
   }
-  
+  */
   /*
   DrawTriangleOnFrameBuffer(m_pSceneFrameBuffer, 
     300, 500, 
@@ -154,9 +109,56 @@ void Render::DrawFrame()
     0, 255, 0,
     0, 0, 255);
    */
-  QueryPerformanceCounter(&nEndTime);
-  LONGLONG ms_time = (nEndTime.QuadPart - m_nBeginTime.QuadPart) * 1000 / m_nFreq.QuadPart;
-  m_fFPS = 1000.0f / ms_time;
+  CleanBackground(0, 0, 0);
+
+  //prepare raster input triangle data 
+  std::list<Triangle*> traingles;
+  float *vex_ptr = (float*)VertexDataCache::GetInstance()->
+    GetVertexDataDataPtr(m_iVexVexDataBuffer);
+  int   *index_ptr = (int*)VertexDataCache::GetInstance()->
+    GetVertexDataDataPtr(m_iVexIndexDataBuffer);
+  for (int i = 0; i < count; ++i)
+  {
+    Triangle *triangle = new Triangle;
+    triangle->vertexs = vex_ptr;
+    memcpy(triangle->indexs, index_ptr + 3 * i, sizeof(int) * 3);
+    traingles.push_back(triangle);
+  }
+
+  std::list<OutPoint*> out_points;
+  Raster::GetInstance()->Rasterise(traingles, out_points);
+
+  for(std::list<OutPoint*>::iterator itr = out_points.begin();
+    itr != out_points.end(); ++itr)
+  {
+    m_pSceneFrameBuffer->SetBufferDataRGB((*itr)->vertexs[0], (*itr)->vertexs[1], 0, 0, 0);
+  }
+
+  //clean all temp data
+  for(std::list<Triangle*>::iterator itr = traingles.begin();
+      itr != traingles.end(); ++itr)
+  {
+    delete (*itr);
+  }
+  traingles.clear();
+  for(std::list<OutPoint*>::iterator itr = out_points.begin();
+    itr != out_points.end(); ++itr)
+  {
+    delete (*itr);
+  }
+  out_points.clear();
+}
+
+void Render::CleanBackground(int r, int g, int b)
+{
+    memset(m_pSceneFrameBuffer->GetFrameBufferData(), 255, 
+      sizeof(uchar) * m_pSceneFrameBuffer->GetTotalByteCount());
+}
+
+void Render::CleanZBuffer()
+{
+    memset(m_pZFrameBuffer->GetFrameBufferDataFloat(), 0, 
+      sizeof(float) * m_pZFrameBuffer->GetTotalByteCount());
 }
 
 void Render::SetViewPortSize( int width, int height )
@@ -169,10 +171,6 @@ void Render::SetViewPortSize( int width, int height )
 		cleanFrameBuffers();
 		initFrameBuffers();
 	}
-  m_camera.ResetViewMat();
-  m_camera.LookAt(2, 2, 2, 0, 1, 0, 0, 0, 0);
-  m_camera.ResetProjMat();
-  m_camera.PerspectiveProj(90, 1, 1.414, 10);
 }
 
 void Render::initFrameBuffers()

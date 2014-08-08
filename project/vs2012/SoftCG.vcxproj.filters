@@ -72,6 +72,15 @@
     <ClInclude Include="..\..\src\render\draw_utils.h">
       <Filter>src\render</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\render\vertex_data_cache.h">
+      <Filter>src\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\render\render_common.h">
+      <Filter>src\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\render\raster.h">
+      <Filter>src\render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SoftCG.cpp">
@@ -99,6 +108,12 @@
       <Filter>src\render</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\render\render.cpp">
+      <Filter>src\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\render\vertex_data_cache.cpp">
+      <Filter>src\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\render\raster.cpp">
       <Filter>src\render</Filter>
     </ClCompile>
   </ItemGroup>

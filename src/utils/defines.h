@@ -10,13 +10,7 @@ typedef unsigned int    uint;
 
 enum eDataType
 {
-  kDataTypeByte,
-  kDataTypeChar,
-  kDataTypeUChar,
-  kDataTypeShort,
-  kDataTypeUShort,
   kDataTypeInt,
-  kDataTypeUInt,
   kDataTypeFloat
 };
 

@@ -57,12 +57,24 @@ typedef struct PARMLINE2D_TYP
 	VECTOR2D v;		//direction vector
 }PARMLINE2D, *PARMLINE2D_PTR;
 
+typedef struct POINTNORMALLINE2D_TYP
+{
+  POINT2D   p0;
+  VECTOR2D  n;
+}POINTNORMALLINE2D, *POINTNORMALLINE2D_PTR;
+
 typedef struct PARMLINE3D_TYP
 {
 	POINT3D p0;		//start point
 	POINT3D p1;		//end point
 	VECTOR3D v;		//direction vector
 }PARMLINE3D, *PARMLINE3D_PTR;
+
+typedef struct POINTNORMALLINE3D_TYP
+{
+  POINT3D   p0;
+  VECTOR3D  n;
+}POINTNORMALLINE3D, *POINTNORMALLINE3D_PTR;
 
 typedef struct PLANE3D_TYP
 {
@@ -580,10 +592,16 @@ void PLANE3D_Init(PLANE3D_PTR plane, POINT3D_PTR p0, VECTOR3D_PTR normal, int no
 float Compute_Point_In_Plane3D(POINT3D_PTR p0, PLANE3D_PTR plane);
 int Intersect_Parm_Line3D_Plane3D(PARMLINE3D_PTR pline, PLANE3D_PTR plane, float *t, POINT3D_PTR pt);
 
+void Init_Point_Noraml_Line2D(POINT2D_PTR p0, VECTOR2D_PTR n, POINTNORMALLINE2D_PTR line);
+void Init_Point_Noraml_Line2D_With_Point(POINT2D_PTR p0, POINT2D_PTR p1, POINTNORMALLINE2D_PTR line);
+float Distance_Point2D_Point_Normal_Line2D(POINT2D_PTR p, POINTNORMALLINE2D_PTR line);
+
 #define R2A(r)  ((r) * 57.29578049044297f)
 #define A2R(a)  ((a) * 0.017453292222222f)
 
 extern float cos_look[361];
 extern float sin_look[361];
+
+float CalTriangleAreaByPoint(float x0, float y0, float x1, float y1, float x2, float y2);
 
 #endif

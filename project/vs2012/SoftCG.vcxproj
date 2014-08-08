@@ -107,7 +107,10 @@
     <ClInclude Include="..\..\src\math\math_3d.h" />
     <ClInclude Include="..\..\src\render\draw_utils.h" />
     <ClInclude Include="..\..\src\render\frame_buffer.h" />
+    <ClInclude Include="..\..\src\render\raster.h" />
     <ClInclude Include="..\..\src\render\render.h" />
+    <ClInclude Include="..\..\src\render\render_common.h" />
+    <ClInclude Include="..\..\src\render\vertex_data_cache.h" />
     <ClInclude Include="..\..\src\utils\defines.h" />
     <ClInclude Include="..\..\src\utils\macro_utils.h" />
     <ClInclude Include="ChildView.h" />
@@ -122,7 +125,9 @@
     <ClCompile Include="..\..\src\math\camera.cpp" />
     <ClCompile Include="..\..\src\math\math_3d.cpp" />
     <ClCompile Include="..\..\src\render\frame_buffer.cpp" />
+    <ClCompile Include="..\..\src\render\raster.cpp" />
     <ClCompile Include="..\..\src\render\render.cpp" />
+    <ClCompile Include="..\..\src\render\vertex_data_cache.cpp" />
     <ClCompile Include="ChildView.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="SoftCG.cpp" />

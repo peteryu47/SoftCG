@@ -1,6 +1,7 @@
 #ifndef __APP_H__
 #define __APP_H__
 
+class Camera;
 namespace render
 {
 	class Render;
@@ -20,8 +21,10 @@ public:
 
 protected:
 	render::Render		*m_pRender;
-	int			m_iWindowWidht;
-	int			m_iWindowHeight;
+  Camera            *m_pCamera;
+	int			          m_iWindowWidht;
+	int			          m_iWindowHeight;
+  float             m_fFrameTime;
 };
 
 #endif
