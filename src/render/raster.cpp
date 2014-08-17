@@ -178,7 +178,7 @@ void Raster::rasteriseUpTriangle( float x0, float y0, float x1, float y1, float 
     {
       OutPoint *point = new OutPoint;
       point->vertexs[0] = x; point->vertexs[1] = y;
-      //out_points.push_back(point);
+      out_points.push_back(point);
     }
     xstart_01 -= k_01_inv;
     xstart_02 -= k_02_inv;
@@ -199,9 +199,9 @@ void Raster::rasteriseDownTriangle( float x0, float y0, float x1, float y1, floa
   {
     for(int x = int(xstart_10); x <= int(xstart_20); ++x)
     {
-      //OutPoint *point = new OutPoint;
-      //point->vertexs[0] = x; point->vertexs[1] = y;
-      //out_points.push_back(point);
+      OutPoint *point = new OutPoint;
+      point->vertexs[0] = x; point->vertexs[1] = y;
+      out_points.push_back(point);
     }
     xstart_10 -= k_10_inv;
     xstart_20 -= k_20_inv;
