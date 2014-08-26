@@ -1128,32 +1128,5 @@ float Distance_Point2D_Point_Normal_Line2D( POINT2D_PTR p, POINTNORMALLINE2D_PTR
   return fabsf(line->n.x * (p->x - line->p0.x) + line->n.y * (p->y - line->p0.y));
 }
 
-float CalTriangleAreaByPoint( float x0, float y0, float x1, float y1, float x2, float y2 )
-{
-  /*
-  POINT2D p0, p1, p2;
-  p0.x = x0; p0.y = y0;
-  p1.x = x1; p1.y = y1;
-  p2.x = x2; p2.y = y2;
-  POINTNORMALLINE2D line;
-  Init_Point_Noraml_Line2D_With_Point(&p0, &p1, &line);
-  float h = Distance_Point2D_Point_Normal_Line2D(&p2, &line);
-  VECTOR2D_Sub(&p0, &p1, &p2);
-  return (h * VECTOR2D_Lenght_Fast(&p2) * 0.5);
-  */
-  POINT2D p0, p1, p2, pt;
-  p0.x = x0; p0.y = y0;
-  p1.x = x1; p1.y = y1;
-  p2.x = x2; p2.y = y2;
-  VECTOR2D_Sub(&p1, &p0, &pt);
-  float a = VECTOR2D_Lenght_Fast(&pt);
-  VECTOR2D_Sub(&p2, &p0, &pt);
-  float b = VECTOR2D_Lenght_Fast(&pt);
-  VECTOR2D_Sub(&p1, &p2, &pt);
-  float c = VECTOR2D_Lenght_Fast(&pt);
-  float p = (a + b + c) / 2.0f;
-  return Fast_Sqrt(p * (p - a) * (p - b) * (p - c));
-}
-
 
 

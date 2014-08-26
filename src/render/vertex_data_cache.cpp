@@ -24,7 +24,7 @@ void VertexDataCache::PurgeVertexDataCache()
 {
   for (int i = 0; i < VERTEXE_DATA_CACHE_MAX_COUNT; ++i)
   {
-    SAFE_FREE(m_data_caches[i].data_ptr);
+    SAFE_DELETE_N(m_data_caches[i].data_ptr);
   }
 }
 
@@ -50,11 +50,11 @@ void VertexDataCache::BindVertexDataBufferData( int buffer_id, eDataType data_ty
   switch (data_type)
   {
   case kDataTypeInt:
-    m_data_caches[buffer_id].data_ptr = malloc(sizeof(int) * unit_size * unit_count);
+    m_data_caches[buffer_id].data_ptr = new int[unit_size * unit_count];
     memcpy(m_data_caches[buffer_id].data_ptr, data_ptr, sizeof(int) * unit_size * unit_count);
     break;
   case kDataTypeFloat:
-    m_data_caches[buffer_id].data_ptr = malloc(sizeof(float) * unit_size * unit_count);
+    m_data_caches[buffer_id].data_ptr = new float[unit_size * unit_count];
     memcpy(m_data_caches[buffer_id].data_ptr, data_ptr, sizeof(float) * unit_size * unit_count);
     break;
   default:
@@ -65,7 +65,7 @@ void VertexDataCache::BindVertexDataBufferData( int buffer_id, eDataType data_ty
 void VertexDataCache::ReleaseVertexDataBufferData( int buffer_id )
 {
   m_data_caches[buffer_id].is_use = false;
-  SAFE_DELETE(m_data_caches[buffer_id].data_ptr);
+  SAFE_DELETE_N(m_data_caches[buffer_id].data_ptr);
 }
 
 }

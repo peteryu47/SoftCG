@@ -316,17 +316,17 @@ inline void VECTOR4D_INIT(VECTOR4D_PTR vdest, VECTOR4D_PTR vsrc)
 	vdest->x = vsrc->x; vdest->y = vsrc->y; vdest->z = vsrc->z; vdest->w = vsrc->w;
 }
 
-inline void VECTOR2D_COPY(VECTOR2D_PTR vdest, VECTOR2D_PTR vsrc)
+inline void VECTOR2D_COPY(VECTOR2D_PTR vdest, const VECTOR2D_PTR vsrc)
 {
 	vdest->x = vsrc->x; vdest->y = vsrc->y;
 }
 
-inline void VECTOR3D_COPY(VECTOR3D_PTR vdest, VECTOR3D_PTR vsrc)
+inline void VECTOR3D_COPY(VECTOR3D_PTR vdest, const VECTOR3D_PTR vsrc)
 {
 	vdest->x = vsrc->x; vdest->y = vsrc->y; vdest->z = vsrc->z;
 }
 
-inline void VECTOR4D_COPY(VECTOR4D_PTR vdest, VECTOR4D_PTR vsrc)
+inline void VECTOR4D_COPY(VECTOR4D_PTR vdest, const VECTOR4D_PTR vsrc)
 {
 	vdest->x = vsrc->x; vdest->y = vsrc->y; vdest->z = vsrc->z; vdest->w = vsrc->w;
 }
@@ -601,7 +601,5 @@ float Distance_Point2D_Point_Normal_Line2D(POINT2D_PTR p, POINTNORMALLINE2D_PTR 
 
 extern float cos_look[361];
 extern float sin_look[361];
-
-float CalTriangleAreaByPoint(float x0, float y0, float x1, float y1, float x2, float y2);
 
 #endif

@@ -23,15 +23,15 @@ const float vertexs[8][3] = {
   { 1, -1, -1}    //7
 };
 
-const float colors[8][3] = {
-  {255,   0,   0},   //0
-  {  0, 255,   0},   //1
-  {  0,   0, 255},   //2
-  {255, 255, 255},   //3
-  {  0,   0,   0},   //4
-  {255, 255,   0},   //5
-  {255,   0, 255},   //6
-  {  0, 255, 255}    //7
+const float colors[8][4] = {
+  {255,   0,   0,   0},   //0
+  {  0, 255,   0,   0},   //1
+  {  0,   0, 255,   0},   //2
+  {255, 255, 255,   0},   //3
+  {  0,   0,   0,   0},   //4
+  {255, 255,   0,   0},   //5
+  {255,   0, 255,   0},   //6
+  {  0, 255, 255,   0}    //7
 };
 
 const int indexes[12][3] = 
@@ -70,24 +70,29 @@ App::App(int width, int height)
 	m_pRender->SetViewPortSize(m_iWindowWidht, m_iWindowHeight);
   m_pCamera = new Camera;
   m_pCamera->ResetViewMat();
-  m_pCamera->LookAt(2, 2, 2, 0, 1, 0, 0, 0, 0);
+  m_pCamera->LookAt(1, 1, 1, 0, 1, 0, 0, 0, 0);
   m_pCamera->ResetProjMat();
   m_pCamera->PerspectiveProj(90, 1, 1.414, 10);
-  m_pRender->SetViewMat(m_pCamera->GetViewMat());
+  m_pRender->SetModelViewMat(m_pCamera->GetViewMat());
   m_pRender->SetProjMat(m_pCamera->GetProjMat());
   int vex_buffer = VertexDataCache::GetInstance()->GenVertexDataBuffer();
   VertexDataCache::GetInstance()->BindVertexDataBufferData
-    (vex_buffer, kDataTypeFloat, 3, 3, (void*)v_data);
+    (vex_buffer, kDataTypeFloat, 3, 8, (void*)vertexs);
   int index_buffer = VertexDataCache::GetInstance()->GenVertexDataBuffer();
   VertexDataCache::GetInstance()->BindVertexDataBufferData
-    (index_buffer, kDataTypeInt, 1, 3, (void*)i_data);
+    (index_buffer, kDataTypeInt, 1, 36, (void*)indexes);
+  int color_buffer = VertexDataCache::GetInstance()->GenVertexDataBuffer();
+  VertexDataCache::GetInstance()->BindVertexDataBufferData
+    (color_buffer, kDataTypeFloat, 4, 8, (void*)colors);
   m_pRender->SetVexVexDataBuffer(vex_buffer);
   m_pRender->SetVexIndexDataBuffer(index_buffer);
+  m_pRender->SetVexColorDataBuffer(color_buffer);
 }
 
 App::~App()
 {
 	SAFE_DELETE(m_pRender);
+  SAFE_DELETE(m_pCamera);
 }
 
 void App::Run()
@@ -103,7 +108,7 @@ void App::Update(float delta)
   QueryPerformanceFrequency(&m_nFreq);
   QueryPerformanceCounter(&m_nBeginTime);
 
-  m_pRender->DrawTriangle(1);
+  m_pRender->DrawTriangle(12);
 	glDrawPixels(600, 600, GL_RGB, GL_UNSIGNED_BYTE, 
 		m_pRender->GetCurSceneFrameBuffer()->GetFrameBufferData());
 

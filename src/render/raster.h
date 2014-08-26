@@ -2,7 +2,7 @@
 #define __RASTER_H__
 
 #include <assert.h>
-#include <list>
+#include <vector>
 
 #include "utils/defines.h"
 #include "utils/macro_utils.h"
@@ -26,18 +26,20 @@ public:
 
   void  PurgeInstace();
 
-  void  Rasterise(const std::list<Triangle*> &triangles, std::list<OutPoint*> &out_points);
+  void  Rasterise(const std::vector<Triangle*> &triangles, std::vector<OutPointPackage*> &out_point_packges);
 
 private:
   void  rasteriseTriangle(float x0, float y0, float x1, float y1, 
     float x2, float y2, int other_count, float *others0, float *others1, 
-    float *others2, std::list<OutPoint*> &out_points);
+    float *others2, OutPointPackage* out_point_package);
   void  rasteriseUpTriangle(float x0, float y0, float x1, float y1, 
     float x2, float y2, int other_count, float *others0, float *others1, 
-    float *others2, std::list<OutPoint*> &out_points);
+    float *others2, OutPointPackage* out_point_package);
   void  rasteriseDownTriangle(float x0, float y0, float x1, float y1,  
     float x2, float y2, int other_count, float *others0, float *others1, 
-    float *others2, std::list<OutPoint*> &out_points);
+    float *others2, OutPointPackage* out_point_package);
+
+  int CalTriangleFitAreaPixelByPoint(float x0, float y0, float x1, float y1, float x2, float y2);
 };
 
 }
