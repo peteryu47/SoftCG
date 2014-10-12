@@ -6,6 +6,7 @@ namespace render
 {
 	class Render;
 	class FrameBuffer;
+  class Texture;
 }
 
 class App
@@ -25,6 +26,7 @@ protected:
 	int			          m_iWindowWidht;
 	int			          m_iWindowHeight;
   float             m_fFrameTime;
+  render::Texture   *m_pTexture;
 };
 
 #endif

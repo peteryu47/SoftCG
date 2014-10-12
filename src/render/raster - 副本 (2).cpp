@@ -242,7 +242,7 @@ void Raster::rasteriseTriangle( float x0, float y0, float x1, float y1,
 
 #define FOR_START for(int i = 0; i < other_count; ++i){
 #define FOR_END   }
-#define PERSPECTIVE_TEXTURE 1
+#define PERSPECTIVE_TEXTURE
 
 //    up
 //    v0
@@ -284,7 +284,7 @@ void Raster::rasteriseUpTriangle( float x0, float y0, float x1, float y1, float 
       point.vertex.x= x; point.vertex.y = y; point.vertex.z = other_x_start[0];
       memcpy(&point.texcoord, other_x_start + 1, sizeof(float) * 2);
 #ifdef PERSPECTIVE_TEXTURE
-      point.texcoord.x /= other_x_start[0]; point.texcoord.y /= other_x_start[0];
+      point.texcoord.x /= point.vertex.z; point.texcoord.y /= point.vertex.z;
 #endif
       memcpy(&point.color, other_x_start + 3, sizeof(float) * 4);
       out_point_package->AddPoint(point);

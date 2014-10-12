@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <vector>
+#include <list>
 
 #include "utils/defines.h"
 #include "utils/macro_utils.h"
@@ -26,7 +27,7 @@ public:
 
   void  PurgeInstace();
 
-  void  Rasterise(const std::vector<Triangle*> &triangles, std::vector<OutPointPackage*> &out_point_packges);
+  void  Rasterise(const std::list<Triangle*> &triangles, std::vector<OutPointPackage*> &out_point_packges);
 
 private:
   void  rasteriseTriangle(float x0, float y0, float x1, float y1, 

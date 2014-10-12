@@ -1,5 +1,5 @@
-#ifndef __VERTEX_DATA_CACHE__
-#define __VERTEX_DATA_CACHE__
+#ifndef __VERTEX_DATA_CACHE_H__
+#define __VERTEX_DATA_CACHE_H__
 
 #include <assert.h>
 #include <vector>

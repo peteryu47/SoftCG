@@ -9,18 +9,20 @@
 #include "render/render.h"
 #include "render/frame_buffer.h"
 #include "render/vertex_data_cache.h"
+#include "render/texture_cache.h"
+#include "render/texture.h"
 
 using namespace render;
 
 const float vertexs[8][3] = {
-  { 1,  1,  1},   //0
-  {-1,  1,  1},   //1
-  {-1,  1, -1},   //2
-  { 1,  1, -1},   //3
-  { 1, -1,  1},   //4
-  {-1, -1,  1},   //5
-  {-1, -1, -1},   //6
-  { 1, -1, -1}    //7
+  { 1.0f,  1.0f,  1.0f},   //0
+  {-1.0f,  1.0f,  1.0f},   //1
+  {-1.0f,  1.0f, -1.0f},   //2
+  { 1.0f,  1.0f, -1.0f},   //3
+  { 1.0f, -1.0f,  1.0f},   //4
+  {-1.0f, -1.0f,  1.0f},   //5
+  {-1.0f, -1.0f, -1.0f},   //6
+  { 1.0f, -1.0f, -1.0f}    //7
 };
 
 const float colors[8][4] = {
@@ -32,6 +34,18 @@ const float colors[8][4] = {
   {255, 255,   0,   0},   //5
   {255,   0, 255,   0},   //6
   {  0, 255, 255,   0}    //7
+};
+
+const float texCod[8][2] = 
+{
+  {1.0f, 1.0f},
+  {0.0f, 1.0f},
+  {0.0f, 0.0f},
+  {1.0f, 0.0f},
+  {1.0f, 1.0f},
+  {0.0f, 1.0f},
+  {0.0f, 0.0f},
+  {1.0f, 0.0f},
 };
 
 const int indexes[12][3] = 
@@ -64,15 +78,17 @@ const int i_data[3] =
 
 App::App(int width, int height)
 	:	m_iWindowWidht(width),
-		m_iWindowHeight(height)
+		m_iWindowHeight(height),
+    m_pTexture(NULL)
 {
 	m_pRender = new render::Render();
 	m_pRender->SetViewPortSize(m_iWindowWidht, m_iWindowHeight);
   m_pCamera = new Camera;
   m_pCamera->ResetViewMat();
-  m_pCamera->LookAt(1, 1, 1, 0, 1, 0, 0, 0, 0);
+  //m_pCamera->LookAt(1, 1, 1, 0, 1, 0, 0, 0, 0);
+  m_pCamera->LookAt(0, 2, -2, 0, 1, 0, 0, 0, 0);
   m_pCamera->ResetProjMat();
-  m_pCamera->PerspectiveProj(90, 1, 1.414, 10);
+  m_pCamera->PerspectiveProj(90, 1, 1, 10);
   m_pRender->SetModelViewMat(m_pCamera->GetViewMat());
   m_pRender->SetProjMat(m_pCamera->GetProjMat());
   int vex_buffer = VertexDataCache::GetInstance()->GenVertexDataBuffer();
@@ -84,15 +100,23 @@ App::App(int width, int height)
   int color_buffer = VertexDataCache::GetInstance()->GenVertexDataBuffer();
   VertexDataCache::GetInstance()->BindVertexDataBufferData
     (color_buffer, kDataTypeFloat, 4, 8, (void*)colors);
+  int texcod_buffer = VertexDataCache::GetInstance()->GenVertexDataBuffer();
+  VertexDataCache::GetInstance()->BindVertexDataBufferData
+    (texcod_buffer, kDataTypeFloat, 2, 8, (void*)texCod);
   m_pRender->SetVexVexDataBuffer(vex_buffer);
   m_pRender->SetVexIndexDataBuffer(index_buffer);
   m_pRender->SetVexColorDataBuffer(color_buffer);
+  m_pRender->SetVexTexCoordDataBuffer(texcod_buffer);
+
+  m_pTexture = render::TextureCache::GetInstance()->AddTexture("F:\\Git\\SoftCG\\res\\test.bmp");
+  m_pRender->SetTexture(m_pTexture);
 }
 
 App::~App()
 {
 	SAFE_DELETE(m_pRender);
   SAFE_DELETE(m_pCamera);
+  SAFE_DELETE(m_pTexture);
 }
 
 void App::Run()
@@ -108,7 +132,7 @@ void App::Update(float delta)
   QueryPerformanceFrequency(&m_nFreq);
   QueryPerformanceCounter(&m_nBeginTime);
 
-  m_pRender->DrawTriangle(12);
+  m_pRender->DrawTriangle(2);
 	glDrawPixels(600, 600, GL_RGB, GL_UNSIGNED_BYTE, 
 		m_pRender->GetCurSceneFrameBuffer()->GetFrameBufferData());
 
