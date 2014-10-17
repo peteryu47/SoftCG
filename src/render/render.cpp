@@ -91,6 +91,14 @@ void Render::DrawTriangle(int count)
     memcpy(&triangle->vertexs[1], &rp1, sizeof(float) * 3);
     memcpy(&triangle->vertexs[2], &rp2, sizeof(float) * 3);
 
+    //Mat_Mul_VECTOR4D_4X4(&p0, &m_matMView, &rp0);
+    //Mat_Mul_VECTOR4D_4X4(&p1, &m_matMView, &rp1);
+    //Mat_Mul_VECTOR4D_4X4(&p2, &m_matMView, &rp2);
+
+    triangle->vertexs[0].z = rp0.w;
+    triangle->vertexs[1].z = rp1.w;
+    triangle->vertexs[2].z = rp2.w;
+
     triangles.push_back(triangle);
   }
 

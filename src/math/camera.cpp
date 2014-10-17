@@ -48,7 +48,7 @@ void Camera::PerspectiveProj(float xleft, float xright, float ytop, float ybutto
   m_mat_proj_.M00 = 2.0f * znear / (xright - xleft); m_mat_proj_.M01 = 0; m_mat_proj_.M02 = 0; m_mat_proj_.M03 = 0;
   m_mat_proj_.M10 = 0; m_mat_proj_.M11 = 2.0f * znear / (ytop - ybuttom); m_mat_proj_.M12 = 0; m_mat_proj_.M13 = 0;
   m_mat_proj_.M20 = 0; m_mat_proj_.M21 = 0; m_mat_proj_.M22 = 1.0f / (zfar - znear); m_mat_proj_.M23 = 1;
-  m_mat_proj_.M30 = - (xright - xleft) / (xright - xleft); m_mat_proj_.M31 = - (ytop + ybuttom) / (ytop - ybuttom); m_mat_proj_.M32 = - znear / (zfar - znear); m_mat_proj_.M33 = 0;
+  m_mat_proj_.M30 = - (xright + xleft) / (xright - xleft); m_mat_proj_.M31 = - (ytop + ybuttom) / (ytop - ybuttom); m_mat_proj_.M32 = - znear / (zfar - znear); m_mat_proj_.M33 = 0;
   Mat_Mul_4X4(&m_mat_view_, &m_mat_proj_, &m_mat_view_proj_);
 
   m_fznear_ = znear;
@@ -72,8 +72,8 @@ void Camera::OrthogonalProj( float xleft, float xright, float ytop, float ybutto
 {
   m_mat_proj_.M00 = 2.0f / (xright - xleft); m_mat_proj_.M01 = 0; m_mat_proj_.M02 = 0; m_mat_proj_.M03 = 0;
   m_mat_proj_.M10 = 0; m_mat_proj_.M11 = 2.0f / (ytop - ybuttom); m_mat_proj_.M12 = 0; m_mat_proj_.M13 = 0;
-  m_mat_proj_.M20 = 0; m_mat_proj_.M21 = 0; m_mat_proj_.M22 = 1.0f / (zfar - znear); m_mat_proj_.M23 = 1;
-  m_mat_proj_.M30 = - (xright - xleft) / (xright - xleft); m_mat_proj_.M31 = - (ytop + ybuttom) / (ytop - ybuttom); m_mat_proj_.M32 = - znear / (zfar - znear); m_mat_proj_.M33 = 1;
+  m_mat_proj_.M20 = 0; m_mat_proj_.M21 = 0; m_mat_proj_.M22 = 1.0f / (zfar - znear); m_mat_proj_.M23 = 0;
+  m_mat_proj_.M30 = - (xright + xleft) / (xright - xleft); m_mat_proj_.M31 = - (ytop + ybuttom) / (ytop - ybuttom); m_mat_proj_.M32 = - znear / (zfar - znear); m_mat_proj_.M33 = 1;
   Mat_Mul_4X4(&m_mat_view_, &m_mat_proj_, &m_mat_view_proj_);
 }
 

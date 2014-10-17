@@ -86,7 +86,7 @@ App::App(int width, int height)
   m_pCamera = new Camera;
   m_pCamera->ResetViewMat();
   //m_pCamera->LookAt(1, 1, 1, 0, 1, 0, 0, 0, 0);
-  m_pCamera->LookAt(0, 2, -2, 0, 1, 0, 0, 0, 0);
+  m_pCamera->LookAt(0, 3, -3, 0, 1, 0, 0, 0, 0);
   m_pCamera->ResetProjMat();
   m_pCamera->PerspectiveProj(90, 1, 1, 10);
   m_pRender->SetModelViewMat(m_pCamera->GetViewMat());
