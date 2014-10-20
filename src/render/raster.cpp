@@ -62,6 +62,7 @@ void Raster::Rasterise( const std::list<Triangle*> &triangles, std::vector<OutPo
 #define C_SWAP_ARRAY(x, y, t, count)  memcpy(t, x, sizeof(float) * count); \
   memcpy(x, y, sizeof(float) * count); memcpy(y, t, sizeof(float) * count) 
 #define C_COPY(x, y, count)           memcpy(x, y, sizeof(float) * count)
+#define PERSPECTIVE_TEXTURE 1
 
 void Raster::rasteriseTriangle( float x0, float y0, float x1, float y1, 
                                 float x2, float y2, int other_count, 
@@ -197,7 +198,7 @@ void Raster::rasteriseTriangle( float x0, float y0, float x1, float y1,
     //  v1            v0    v2
     //  
     //               v1
-    if(int(x0) < int(x2))
+    if(int(x1) < int(x2))
     {
       float x = ((x1 - x0) / (y1 - y0) * (y2 - y0) + x0);
       float len_factor = (y2 - y0) / (y1 - y0);
@@ -205,6 +206,20 @@ void Raster::rasteriseTriangle( float x0, float y0, float x1, float y1,
       {
         t_array[i] = (others1[i] - others0[i]) * len_factor + others0[i];
       }
+
+#ifdef PERSPECTIVE_TEXTURE
+      float t_others0_1_z = 1.0f / others0[0];
+      float t_others1_1_z = 1.0f / others1[0];
+      float t_others0_s_z = others0[1] * t_others0_1_z;
+      float t_others1_s_z = others1[1] * t_others1_1_z;
+      float t_others0_t_z = others0[2] * t_others0_1_z;
+      float t_others1_t_z = others1[2] * t_others1_1_z;
+
+      t_array[0] = 1.0f / ((t_others1_1_z - t_others0_1_z) * len_factor + t_others0_1_z);
+      t_array[1] = ((t_others1_s_z - t_others0_s_z) * len_factor + t_others0_s_z) * t_array[0];
+      t_array[2] = ((t_others1_t_z - t_others0_t_z) * len_factor + t_others0_t_z) * t_array[0];
+#endif
+
       //up
       rasteriseUpTriangle(x0, y0, x, y2, x2, y2, 
         other_count, others0, t_array, others2, out_point_package);
@@ -230,6 +245,19 @@ void Raster::rasteriseTriangle( float x0, float y0, float x1, float y1,
         t_array[i] = (others1[i] - others0[i]) * len_factor + others0[i];
       }
 
+#ifdef PERSPECTIVE_TEXTURE
+      float t_others0_1_z = 1.0f / others0[0];
+      float t_others1_1_z = 1.0f / others1[0];
+      float t_others0_s_z = others0[1] * t_others0_1_z;
+      float t_others1_s_z = others1[1] * t_others1_1_z;
+      float t_others0_t_z = others0[2] * t_others0_1_z;
+      float t_others1_t_z = others1[2] * t_others1_1_z;
+
+      t_array[0] = 1.0f / ((t_others1_1_z - t_others0_1_z) * len_factor + t_others0_1_z);
+      t_array[1] = ((t_others1_s_z - t_others0_s_z) * len_factor + t_others0_s_z) * t_array[0];
+      t_array[2] = ((t_others1_t_z - t_others0_t_z) * len_factor + t_others0_t_z) * t_array[0];
+#endif
+
       // up
       rasteriseUpTriangle(x0, y0, x2, y2, x, y2, 
         other_count, others0, others2, t_array, out_point_package);
@@ -242,7 +270,6 @@ void Raster::rasteriseTriangle( float x0, float y0, float x1, float y1,
 
 #define FOR_START for(int i = 0; i < other_count; ++i){
 #define FOR_END   }
-#define PERSPECTIVE_TEXTURE 1
 
 //    up
 //    v0
@@ -262,17 +289,37 @@ void Raster::rasteriseUpTriangle( float x0, float y0, float x1, float y1, float 
   float other_02y_step[10];
   float other_x_start[10];
   float other_x_step[10];
-#ifdef PERSPECTIVE_TEXTURE
-  others0[0] = 1.0f / others0[0]; others0[1] *= others0[0]; others0[2] *= others0[0];
-  others1[0] = 1.0f / others1[0]; others1[1] *= others1[0]; others1[2] *= others1[0];
-  others2[0] = 1.0f / others2[0]; others2[1] *= others2[0]; others2[2] *= others2[0];
-#endif
+
   memcpy(other_01y_start, others0, sizeof(float) * other_count);
   memcpy(other_02y_start, others0, sizeof(float) * other_count);
+
+#ifdef PERSPECTIVE_TEXTURE
+  other_01y_start[0] = 1.0f / other_01y_start[0]; other_01y_start[1] *= other_01y_start[0]; other_01y_start[2] *= other_01y_start[0];
+  other_02y_start[0] = 1.0f / other_02y_start[0]; other_02y_start[1] *= other_02y_start[0]; other_02y_start[2] *= other_02y_start[0];
+#endif
+
   FOR_START
   other_01y_step[i] = (others1[i] - others0[i]) / (int(y0) - int(y1));
   other_02y_step[i] = (others2[i] - others0[i]) / (int(y0) - int(y1));
   FOR_END
+
+#ifdef PERSPECTIVE_TEXTURE
+  float others1_z_0 = 1.0f / others1[0];
+  float others1_z_1 = others1[1] * others1_z_0;
+  float others1_z_2 = others1[2] * others1_z_0;
+
+  other_01y_step[0] = (others1_z_0 - other_01y_start[0]) / (int(y0) - int(y1));
+  other_01y_step[1] = (others1_z_1 - other_01y_start[1]) / (int(y0) - int(y1));
+  other_01y_step[2] = (others1_z_2 - other_01y_start[2]) / (int(y0) - int(y1));
+
+  float others2_z_0 = 1.0f / others2[0];
+  float others2_z_1 = others2[1] * others2_z_0;
+  float others2_z_2 = others2[2] * others2_z_0;
+
+  other_02y_step[0] = (others2_z_0 - other_02y_start[0]) / (int(y0) - int(y1));
+  other_02y_step[1] = (others2_z_1 - other_02y_start[1]) / (int(y0) - int(y1));
+  other_02y_step[2] = (others2_z_2 - other_02y_start[2]) / (int(y0) - int(y1));
+#endif
 
   OutPoint point;
   for(int y = y0; y >= int(y1); --y)
@@ -284,7 +331,8 @@ void Raster::rasteriseUpTriangle( float x0, float y0, float x1, float y1, float 
       point.vertex.x= x; point.vertex.y = y; point.vertex.z = other_x_start[0];
       memcpy(&point.texcoord, other_x_start + 1, sizeof(float) * 2);
 #ifdef PERSPECTIVE_TEXTURE
-      point.texcoord.x /= other_x_start[0]; point.texcoord.y /= other_x_start[0];
+      point.vertex.z = 1.0f / other_x_start[0];
+      point.texcoord.x *= point.vertex.z; point.texcoord.y *= point.vertex.z;
 #endif
       memcpy(&point.color, other_x_start + 3, sizeof(float) * 4);
       out_point_package->AddPoint(point);
@@ -316,19 +364,32 @@ void Raster::rasteriseDownTriangle( float x0, float y0, float x1, float y1, floa
   float other_x_start[10];
   float other_x_step[10];
 
-#ifdef PERSPECTIVE_TEXTURE
-  others0[0] = 1.0f / others0[0]; others0[1] *= others0[0]; others0[2] *= others0[0];
-  others1[0] = 1.0f / others1[0]; others1[1] *= others1[0]; others1[2] *= others1[0];
-  others2[0] = 1.0f / others2[0]; others2[1] *= others2[0]; others2[2] *= others2[0];
-#endif
-
   memcpy(other_10y_start, others1, sizeof(float) * other_count);
   memcpy(other_20y_start, others2, sizeof(float) * other_count);
+
+#ifdef PERSPECTIVE_TEXTURE
+  other_10y_start[0] = 1.0f / other_10y_start[0]; other_10y_start[1] *= other_10y_start[0]; other_10y_start[2] *= other_10y_start[0];
+  other_20y_start[0] = 1.0f / other_20y_start[0]; other_20y_start[1] *= other_20y_start[0]; other_20y_start[2] *= other_20y_start[0];
+#endif
 
   FOR_START
   other_10y_step[i] = (others0[i] - others1[i]) / (int(y1) - int(y0));
   other_20y_step[i] = (others0[i] - others2[i]) / (int(y1) - int(y0));
   FOR_END
+
+#ifdef PERSPECTIVE_TEXTURE
+  float others0_z_0 = 1.0f / others0[0];
+  float others0_z_1 = others0[1] * others0_z_0;
+  float others0_z_2 = others0[2] * others0_z_0;
+
+  other_10y_step[0] = (others0_z_0 - other_10y_start[0]) / (int(y1) - int(y0));
+  other_10y_step[1] = (others0_z_1 - other_10y_start[1]) / (int(y1) - int(y0));
+  other_10y_step[2] = (others0_z_2 - other_10y_start[2]) / (int(y1) - int(y0));
+
+  other_20y_step[0] = (others0_z_0 - other_20y_start[0]) / (int(y1) - int(y0));
+  other_20y_step[1] = (others0_z_1 - other_20y_start[1]) / (int(y1) - int(y0));
+  other_20y_step[2] = (others0_z_2 - other_20y_start[2]) / (int(y1) - int(y0));
+#endif
 
   OutPoint point;
   for(int y = y1; y >= int(y0); --y)
@@ -340,7 +401,8 @@ void Raster::rasteriseDownTriangle( float x0, float y0, float x1, float y1, floa
       point.vertex.x= x; point.vertex.y = y; point.vertex.z = other_x_start[0];
       memcpy(&point.texcoord, other_x_start + 1, sizeof(float) * 2);
 #ifdef PERSPECTIVE_TEXTURE
-      point.texcoord.x /= point.vertex.z; point.texcoord.y /= point.vertex.z;
+      point.vertex.z = 1.0f / other_x_start[0];
+      point.texcoord.x *= point.vertex.z; point.texcoord.y *= point.vertex.z;
 #endif
       memcpy(&point.color, other_x_start + 3, sizeof(float) * 4);
       out_point_package->AddPoint(point);

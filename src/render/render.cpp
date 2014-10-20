@@ -62,9 +62,9 @@ void Render::DrawTriangle(int count)
     memcpy(&p1, vex_ptr + index1 * 3, sizeof(float) * 3);
     memcpy(&p2, vex_ptr + index2 * 3, sizeof(float) * 3);
 
-    memcpy(&triangle->colors[0], color_ptr + index0 * 4, sizeof(float) * 4);
-    memcpy(&triangle->colors[1], color_ptr + index1 * 4, sizeof(float) * 4);
-    memcpy(&triangle->colors[2], color_ptr + index2 * 4, sizeof(float) * 4);
+    //memcpy(&triangle->colors[0], color_ptr + index0 * 4, sizeof(float) * 4);
+    //memcpy(&triangle->colors[1], color_ptr + index1 * 4, sizeof(float) * 4);
+    //memcpy(&triangle->colors[2], color_ptr + index2 * 4, sizeof(float) * 4);
 
     memcpy(&triangle->texcoords[0], texcod_ptr + index0 * 2, sizeof(float) * 2);
     memcpy(&triangle->texcoords[1], texcod_ptr + index1 * 2, sizeof(float) * 2);
