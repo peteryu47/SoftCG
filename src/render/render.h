@@ -38,6 +38,8 @@ public:
 
 public:
 	void			SetViewPortSize(int width, int height);
+  int       GetViewPortWidth(){return m_iViewPortWidth;}
+  int       GetViewportHeight(){return m_iViewPortHeight;}
 
 protected:
 	void			initFrameBuffers();

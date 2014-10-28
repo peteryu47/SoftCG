@@ -22,7 +22,10 @@ public:
   MATRIX4X4_PTR	GetProjMat(){return &m_mat_proj_;}
 	MATRIX4X4_PTR GetViewProjMat(){return &m_mat_view_proj_;}
 
-  void          MoveCameraDeltaXY(float x, float y);
+  POINT3D_PTR   GetPointEye(){return &m_point_eye_;}
+  POINT3D_PTR   GetPointView(){return &m_point_view_;}
+  float         GetZNear(){return m_fznear_;}
+  float         GetAngle2(){return m_fangle_2_;}
 
 private:
 	MATRIX4X4		m_mat_view_;
@@ -32,6 +35,7 @@ private:
   POINT3D     m_point_view_;
   VECTOR3D    m_vec_up_;
   float       m_fznear_;
+  float       m_fzfar_;
   float       m_fangle_2_;
 };
 

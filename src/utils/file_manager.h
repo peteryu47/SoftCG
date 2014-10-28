@@ -4,10 +4,6 @@
 #include "utils/macro_utils.h"
 #include "utils/defines.h"
 
-#include <vector>
-
-using namespace std;
-
 class FileManager
 {
 private:
@@ -18,19 +14,14 @@ public:
 
   static FileManager* GetInstance(){static FileManager file_manager; return &file_manager;}
 
-  char* GetFileData(const char* file_path, int *file_len);                //r-path
-  bool  WriteData2File(const char* file_path, char* data, int data_len);  //a-path
-  bool  IsFileExist(const char* file_path);                               //a-path
-  bool  IsDirExist(const char* dir_path);                                 //a-path
-  bool  CreateDir(const char* dir_path);                                  //a-path
-  bool  RemoveFile(const char* file_path);                                //a-path
-  bool  RemoveDir(const char* dir_path);                                  //a-path
-
-  char* GetFullPath(const char* path);                                    //r-path, return a-path
-  void  AddSearchPath(const char* path);                                  //a-path
-
-private:
-  vector<string> search_paths_;
+  char* GetFileData(char* file_path, int *file_len);
+  bool  WriteData2File(char* file_path, char* data, int data_len);
+  bool  IsFileExist(char* file_path);
+  bool  IsDirExist(char* dir_path);
+  bool  CreateFile1(char* file_path);
+  bool  CreateDir(char* dir_path);
+  bool  RemoveFile(char* file_path);
+  bool  RemoveDir(char* dir_path);
 };
 
 #endif

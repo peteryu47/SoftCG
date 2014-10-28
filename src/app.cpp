@@ -172,7 +172,7 @@ App::App(int width, int height)
   m_pCamera = new Camera;
   m_pCamera->ResetViewMat();
   //m_pCamera->LookAt(1, 1, 1, 0, 1, 0, 0, 0, 0);
-  m_pCamera->LookAt(2, 2, -2, 0, 1, 0, 0, 0, 0);
+  m_pCamera->LookAt(2.0f, 2.0f, -2.0f, 0, 1, 0, 0, 0, 0);
   m_pCamera->ResetProjMat();
   m_pCamera->PerspectiveProj(90, 1, 1, 10);
   m_pRender->SetModelViewMat(m_pCamera->GetViewMat());
@@ -194,7 +194,7 @@ App::App(int width, int height)
   m_pRender->SetVexColorDataBuffer(color_buffer);
   m_pRender->SetVexTexCoordDataBuffer(texcod_buffer);
 
-  m_pTexture = render::TextureCache::GetInstance()->AddTexture("test.bmp");
+  m_pTexture = render::TextureCache::GetInstance()->AddTexture("F:\\Git\\SoftCG\\res\\test.bmp");
   m_pRender->SetTexture(m_pTexture);
 }
 

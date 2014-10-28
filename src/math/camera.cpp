@@ -52,6 +52,7 @@ void Camera::PerspectiveProj(float xleft, float xright, float ytop, float ybutto
   Mat_Mul_4X4(&m_mat_view_, &m_mat_proj_, &m_mat_view_proj_);
 
   m_fznear_ = znear;
+  m_fzfar_  = zfar;
   m_fangle_2_ = atanf((ytop - ybuttom) / (xright - xright));
 }
 
@@ -65,6 +66,7 @@ void Camera::PerspectiveProj( float angle, float aspect, float znear, float zfar
   Mat_Mul_4X4(&m_mat_view_, &m_mat_proj_, &m_mat_view_proj_);
 
   m_fznear_ = znear;
+  m_fzfar_  = zfar;
   m_fangle_2_ = angle / 2;
 }
 
@@ -85,15 +87,4 @@ void Camera::ResetViewMat()
 void Camera::ResetProjMat()
 {
   MAT_IDENTITY_4X4(&m_mat_proj_);
-}
-
-void Camera::MoveCameraDeltaXY( float x, float y )
-{
-  VECTOR3D n;
-  VECTOR3D_Sub(&m_point_view_, &m_point_eye_, &n);
-  VECTOR3D_Normalize(&n);
-
-  VECTOR3D u;
-  VECTOR3D_Cross(&m_vec_up_, &n, &u);
-  VECTOR3D_Normalize(&u);
 }
