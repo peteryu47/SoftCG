@@ -86,3 +86,14 @@ void Camera::ResetProjMat()
 {
   MAT_IDENTITY_4X4(&m_mat_proj_);
 }
+
+void Camera::MoveCameraDeltaXY( float x, float y )
+{
+  VECTOR3D n;
+  VECTOR3D_Sub(&m_point_view_, &m_point_eye_, &n);
+  VECTOR3D_Normalize(&n);
+
+  VECTOR3D u;
+  VECTOR3D_Cross(&m_vec_up_, &n, &u);
+  VECTOR3D_Normalize(&u);
+}

@@ -14,6 +14,10 @@
 #endif
 
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 // CSoftCGApp
 
 BEGIN_MESSAGE_MAP(CSoftCGApp, CWinAppEx)
@@ -44,7 +48,10 @@ CSoftCGApp theApp;
 
 BOOL CSoftCGApp::InitInstance()
 {
+  
 	CWinAppEx::InitInstance();
+
+  afxAmbientActCtx= FALSE;
 
 
 	EnableTaskbarInteraction(FALSE);
@@ -97,6 +104,8 @@ int CSoftCGApp::ExitInstance()
 {
 	//TODO: handle additional resources you may have added
 	return CWinAppEx::ExitInstance();
+
+  _CrtDumpMemoryLeaks();
 }
 
 // CSoftCGApp message handlers

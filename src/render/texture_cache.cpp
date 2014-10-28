@@ -5,6 +5,7 @@
 #include "utils/random_utils.h"
 #include "render/texture.h"
 #include "utils/file_manager.h"
+#include <Windows.h>
 
 namespace render
 {
@@ -41,6 +42,11 @@ void TextureCache::loadTextureBmp(Texture* texture, char* file_path)
   assert(texture != NULL);
   int data_len = 0;
   char* data = FileManager::GetInstance()->GetFileData(file_path, &data_len);
+  if(data == NULL)
+  {
+    assert(false);
+    return;
+  }
   int width = 0;
   int height = 0;
   int lineLength = 0;

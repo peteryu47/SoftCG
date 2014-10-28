@@ -22,6 +22,8 @@ public:
   MATRIX4X4_PTR	GetProjMat(){return &m_mat_proj_;}
 	MATRIX4X4_PTR GetViewProjMat(){return &m_mat_view_proj_;}
 
+  void          MoveCameraDeltaXY(float x, float y);
+
 private:
 	MATRIX4X4		m_mat_view_;
 	MATRIX4X4		m_mat_proj_;

@@ -31,7 +31,10 @@ void Texture::GetRGBA(float w, float h, uchar *r, uchar *g, uchar *b, uchar *a)
     h = 0.0f;
   if(h > 1.0f)
     h = 1.0f;
-  int pos = ARRAY_INDEX(int(w * (m_iTextureWidth - 1)) * 3, int(h * (m_iTextureHeight - 1)), m_iLineTotalLen);
+  int width   = w * (m_iTextureWidth - 1);
+  int height  = h * (m_iTextureHeight - 1);
+  int pos     = ARRAY_INDEX(width * 3, height, m_iLineTotalLen);
+
   if (m_eRGBByteType == kRGBByteTypeRGB24)
   {
     *r = (uchar)*(m_pData + pos);
