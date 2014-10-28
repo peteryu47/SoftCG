@@ -88,3 +88,44 @@ void Camera::ResetProjMat()
 {
   MAT_IDENTITY_4X4(&m_mat_proj_);
 }
+
+void Camera::UpdateCameraDeltaXY(float deltaX, float deltaY)
+{
+  VECTOR3D n;
+  VECTOR3D_Sub(&m_point_view_, &m_point_eye_, &n);
+  float radius = VECTOR3D_Lenght_Fast(&n);
+  VECTOR3D_Normalize(&n);
+
+  VECTOR3D u;
+  VECTOR3D_Cross(&m_vec_up_, &n, &u);
+  VECTOR3D_Normalize(&u);
+
+  VECTOR3D v;
+  VECTOR3D_Cross(&n, &u, &v);
+  VECTOR3D_Normalize(&v);
+
+  VECTOR3D m;
+  m.x = u.x * deltaX + v.x * deltaY;
+  m.y = u.y * deltaX + v.y * deltaY;
+  m.z = u.z * deltaX + v.z * deltaY;
+
+  float len = VECTOR3D_Lenght_Fast(&m);
+  len *= 5.0f;
+  if(len > 0)
+  {
+    float x = len / radius;
+    VECTOR3D_Normalize(&m);
+
+    x = -1.0f * x;
+
+    float cosx = cosf(x);
+    float sinx = sinf(x);
+
+    VECTOR3D eye;
+    eye.x = m_point_view_.x + (-n.x * cosx + m.x * sinx) * radius;
+    eye.y = m_point_view_.y + (-n.y * cosx + m.y * sinx) * radius;
+    eye.z = m_point_view_.z + (-n.z * cosx + m.z * sinx) * radius;
+  
+    LookAt(eye.x, eye.y, eye.z, v.x, v.y, v.z, m_point_view_.x, m_point_view_.y, m_point_view_.z);
+  }
+}

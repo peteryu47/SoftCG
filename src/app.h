@@ -20,6 +20,10 @@ public:
   virtual void  Update(float delta);
   float         GetFPS();
 
+  void          OnLButtonDown(int x, int y);
+  void          OnLButtonUp(int x, int y);
+  void          OnMouseMove(int x, int y);
+
 protected:
 	render::Render		*m_pRender;
   Camera            *m_pCamera;
@@ -27,6 +31,10 @@ protected:
 	int			          m_iWindowHeight;
   float             m_fFrameTime;
   render::Texture   *m_pTexture;
+
+  bool              m_bMoveCamera;
+  int               m_iLastX;
+  int               m_iLastY;
 };
 
 #endif

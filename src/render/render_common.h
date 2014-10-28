@@ -42,6 +42,8 @@ public:
     : count(my_count),
       index(0)
   {
+    if(my_count < 0)
+      my_count = my_count;
     points = new OutPoint[my_count];
   }
   ~OutPointPackage()

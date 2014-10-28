@@ -165,7 +165,8 @@ const int i_data[3] =
 App::App(int width, int height)
 	:	m_iWindowWidht(width),
 		m_iWindowHeight(height),
-    m_pTexture(NULL)
+    m_pTexture(NULL),
+    m_bMoveCamera(true)
 {
 	m_pRender = new render::Render();
 	m_pRender->SetViewPortSize(m_iWindowWidht, m_iWindowHeight);
@@ -218,6 +219,8 @@ void App::Update(float delta)
   QueryPerformanceFrequency(&m_nFreq);
   QueryPerformanceCounter(&m_nBeginTime);
 
+  m_pRender->SetModelViewMat(m_pCamera->GetViewMat());
+
   m_pRender->DrawTriangle(12);
 	glDrawPixels(600, 600, GL_RGB, GL_UNSIGNED_BYTE, 
 		m_pRender->GetCurSceneFrameBuffer()->GetFrameBufferData());
@@ -230,4 +233,31 @@ void App::Update(float delta)
 float App::GetFPS()
 {
   return (1.0 / m_fFrameTime);
+}
+
+void App::OnLButtonDown(int x, int y)
+{
+  m_bMoveCamera = true;
+  m_iLastX = x;
+  m_iLastY = y;
+}
+
+void App::OnLButtonUp(int x, int y)
+{
+  //m_bMoveCamera = false;
+  m_pCamera->UpdateCameraDeltaXY((x - m_iLastX) / 600.0f, (y - m_iLastY) / 600.0f);
+  m_iLastX = x;
+  m_iLastY = y;
+}
+
+void App::OnMouseMove(int x, int y)
+{
+  return;
+  m_bMoveCamera = false;
+  if(m_bMoveCamera)
+  {
+    m_pCamera->UpdateCameraDeltaXY(x - m_iLastX, y - m_iLastY);
+    m_iLastX = x;
+    m_iLastY = y;
+  }
 }

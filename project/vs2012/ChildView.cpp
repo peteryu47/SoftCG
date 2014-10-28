@@ -68,6 +68,9 @@ BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	ON_WM_SIZE()
 	ON_WM_ERASEBKGND()
 	ON_WM_TIMER()
+  ON_WM_MOUSEMOVE()
+  ON_WM_LBUTTONDOWN()
+  ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 
@@ -220,4 +223,28 @@ void CChildView::OnTimer(UINT_PTR nIDEvent)
   str.Format(_T("FPS: %.2f"), app->GetFPS());
   LPCTSTR re=str.AllocSysString();
   pFrame->GetStatusBar()->SetPaneText(0, re);
+}
+
+
+void CChildView::OnMouseMove(UINT nFlags, CPoint point)
+{
+  // TODO: Add your message handler code here and/or call default
+  app->OnMouseMove(point.x, point.y);
+  CWnd::OnMouseMove(nFlags, point);
+}
+
+
+void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+  // TODO: Add your message handler code here and/or call default
+  app->OnLButtonDown(point.x, point.y);
+  CWnd::OnLButtonDown(nFlags, point);
+}
+
+
+void CChildView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+  // TODO: Add your message handler code here and/or call default
+  app->OnLButtonUp(point.x, point.y);
+  CWnd::OnLButtonUp(nFlags, point);
 }

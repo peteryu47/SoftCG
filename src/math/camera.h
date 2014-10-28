@@ -27,6 +27,8 @@ public:
   float         GetZNear(){return m_fznear_;}
   float         GetAngle2(){return m_fangle_2_;}
 
+  void          UpdateCameraDeltaXY(float deltaX, float deltaY);
+
 private:
 	MATRIX4X4		m_mat_view_;
 	MATRIX4X4		m_mat_proj_;
