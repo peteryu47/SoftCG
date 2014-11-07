@@ -42,7 +42,7 @@ public:
     : count(my_count),
       index(0)
   {
-    if(my_count < 0)
+    if(my_count <= 0)
       my_count = my_count;
     points = new OutPoint[my_count];
   }
@@ -53,7 +53,8 @@ public:
 
   void  AddPoint(OutPoint &point)   //copy only, not manage point memory
   {
-    assert(index < count);
+    if(index > count)
+      index = index;
     *(points + index) = point;
     ++index;
   }

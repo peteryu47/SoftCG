@@ -91,6 +91,7 @@ void Camera::ResetProjMat()
 
 void Camera::UpdateCameraDeltaXY(float deltaX, float deltaY)
 {
+  /*
   VECTOR3D n;
   VECTOR3D_Sub(&m_point_view_, &m_point_eye_, &n);
   float radius = VECTOR3D_Lenght_Fast(&n);
@@ -125,7 +126,39 @@ void Camera::UpdateCameraDeltaXY(float deltaX, float deltaY)
     eye.x = m_point_view_.x + (-n.x * cosx + m.x * sinx) * radius;
     eye.y = m_point_view_.y + (-n.y * cosx + m.y * sinx) * radius;
     eye.z = m_point_view_.z + (-n.z * cosx + m.z * sinx) * radius;
+
+    float s = VECTOR3D_Lenght_Fast(&eye);
   
     LookAt(eye.x, eye.y, eye.z, v.x, v.y, v.z, m_point_view_.x, m_point_view_.y, m_point_view_.z);
   }
+  */
+  VECTOR3D n;
+  VECTOR3D_Sub(&m_point_view_, &m_point_eye_, &n);
+  float radius = VECTOR3D_Lenght_Fast(&n);
+  VECTOR3D_Normalize(&n);
+
+  VECTOR3D u;
+  VECTOR3D_Cross(&m_vec_up_, &n, &u);
+  VECTOR3D_Normalize(&u);
+
+  VECTOR3D v;
+  VECTOR3D_Cross(&n, &u, &v);
+  VECTOR3D_Normalize(&v);
+
+  VECTOR3D new_eye;
+  float factor = 0.03;
+  deltaX = -deltaX;
+  new_eye.x = m_point_eye_.x + u.x * deltaX * factor + v.x * deltaY * factor;
+  new_eye.y = m_point_eye_.y + u.y * deltaX * factor + v.y * deltaY * factor;
+  new_eye.z = m_point_eye_.z + u.z * deltaX * factor + v.z * deltaY * factor;
+
+  VECTOR3D new_n;
+  VECTOR3D_Sub(&new_eye, &m_point_view_, &new_n);
+  VECTOR3D_Normalize(&new_n);
+
+  new_eye.x = m_point_view_.x + new_n.x * radius;
+  new_eye.y = m_point_view_.y + new_n.y * radius;
+  new_eye.z = m_point_view_.z + new_n.z * radius;
+
+  LookAt(new_eye.x, new_eye.y, new_eye.z, v.x, v.y, v.z, m_point_view_.x, m_point_view_.y, m_point_view_.z);
 }

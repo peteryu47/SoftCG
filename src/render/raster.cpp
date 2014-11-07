@@ -44,7 +44,7 @@ void Raster::Rasterise( const std::list<Triangle*> &triangles, std::vector<OutPo
       (*itr)->vertexs[1].y, 
       (*itr)->vertexs[2].x, 
       (*itr)->vertexs[2].y);
-    OutPointPackage *out_point_packege = new OutPointPackage(point_count);
+    OutPointPackage *out_point_packege = new OutPointPackage(point_count * 5);
     rasteriseTriangle(
       (*itr)->vertexs[0].x, 
       (*itr)->vertexs[0].y, 

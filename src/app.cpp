@@ -166,14 +166,14 @@ App::App(int width, int height)
 	:	m_iWindowWidht(width),
 		m_iWindowHeight(height),
     m_pTexture(NULL),
-    m_bMoveCamera(true)
+    m_bMoveCamera(false)
 {
 	m_pRender = new render::Render();
 	m_pRender->SetViewPortSize(m_iWindowWidht, m_iWindowHeight);
   m_pCamera = new Camera;
   m_pCamera->ResetViewMat();
   //m_pCamera->LookAt(1, 1, 1, 0, 1, 0, 0, 0, 0);
-  m_pCamera->LookAt(2.0f, 2.0f, -2.0f, 0, 1, 0, 0, 0, 0);
+  m_pCamera->LookAt(1.85f, 2.32f, -1.93f, 0, 1, 0, 0, 0, 0);
   m_pCamera->ResetProjMat();
   m_pCamera->PerspectiveProj(90, 1, 1, 10);
   m_pRender->SetModelViewMat(m_pCamera->GetViewMat());
@@ -244,7 +244,7 @@ void App::OnLButtonDown(int x, int y)
 
 void App::OnLButtonUp(int x, int y)
 {
-  //m_bMoveCamera = false;
+  m_bMoveCamera = false;
   m_pCamera->UpdateCameraDeltaXY((x - m_iLastX) / 600.0f, (y - m_iLastY) / 600.0f);
   m_iLastX = x;
   m_iLastY = y;
@@ -252,8 +252,8 @@ void App::OnLButtonUp(int x, int y)
 
 void App::OnMouseMove(int x, int y)
 {
-  return;
-  m_bMoveCamera = false;
+  //return;
+  //m_bMoveCamera = false;
   if(m_bMoveCamera)
   {
     m_pCamera->UpdateCameraDeltaXY(x - m_iLastX, y - m_iLastY);
