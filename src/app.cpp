@@ -121,9 +121,9 @@ const float cube_texCod[24][2] =
   {1.0f, 1.0f},
 
   {1.0f, 1.0f}, //right
-  {0.0f, 1.0f},
-  {0.0f, 0.0f},
   {1.0f, 0.0f},
+  {0.0f, 0.0f},
+  {0.0f, 1.0f},
 
   {0.0f, 1.0f}, //left
   {0.0f, 0.0f},
@@ -133,7 +133,7 @@ const float cube_texCod[24][2] =
 
 const int cube_indexes[12][3] = 
 {
-    {8, 10, 11},  //up
+//  {8, 10, 11},  //up
   {8, 9, 10},
 
   {12, 13, 14},
@@ -221,7 +221,7 @@ void App::Update(float delta)
 
   m_pRender->SetModelViewMat(m_pCamera->GetViewMat());
 
-  m_pRender->DrawTriangle(12);
+  m_pRender->DrawTriangle(1);
 	glDrawPixels(600, 600, GL_RGB, GL_UNSIGNED_BYTE, 
 		m_pRender->GetCurSceneFrameBuffer()->GetFrameBufferData());
 

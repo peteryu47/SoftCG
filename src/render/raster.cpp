@@ -191,6 +191,8 @@ void Raster::rasteriseTriangle( float x0, float y0, float x1, float y1,
       C_SWAP_ARRAY(others0, others2, t_array, other_count); 
     }
 
+    //(y-y1)/(x-x1)=(y0-y1)/(x0-x1)
+    //(x-x1)(y0-y1)-(y-y1)(x0-x1)=0
     //    up
     //    v0            v0
     //
@@ -198,7 +200,8 @@ void Raster::rasteriseTriangle( float x0, float y0, float x1, float y1,
     //  v1            v0    v2
     //  
     //               v1
-    if(int(x1) < int(x2))
+    // v2 on the left or v1v0
+    if((x2 - x1) * (y0 - y1) - (y2 - y1) * (x0 - x1) > 0)
     {
       float x = ((x1 - x0) / (y1 - y0) * (y2 - y0) + x0);
       float len_factor = (y2 - y0) / (y1 - y0);
