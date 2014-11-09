@@ -406,6 +406,7 @@ void Raster::rasteriseDownTriangle( float x0, float y0, float x1, float y1, floa
 #ifdef PERSPECTIVE_TEXTURE
       point.vertex.z = 1.0f / other_x_start[0];
       point.texcoord.x *= point.vertex.z; point.texcoord.y *= point.vertex.z;
+      //printf("\npos:(%d,%d), st(%f,%f)", x, y, point.texcoord.x, point.texcoord.y);
 #endif
       memcpy(&point.color, other_x_start + 3, sizeof(float) * 4);
       out_point_package->AddPoint(point);

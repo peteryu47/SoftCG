@@ -119,12 +119,13 @@ void Render::DrawTriangle(int count)
       m_pZFrameBuffer->GetBufferDataAF(out_point->vertex.x, out_point->vertex.y, &z);
       if(out_point->vertex.z < z)
       {
-        
         if(m_pTexture)
         {
           m_pTexture->GetRGBA(out_point->texcoord.x, out_point->texcoord.y, &r, &g, &b, &a);
           m_pSceneFrameBuffer->SetBufferDataRGB(out_point->vertex.x, out_point->vertex.y, 
             r, g, b);
+          if(r != 0)
+            r = r;
         }
         else
         {

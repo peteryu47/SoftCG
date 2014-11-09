@@ -133,7 +133,7 @@ const float cube_texCod[24][2] =
 
 const int cube_indexes[12][3] = 
 {
-//  {8, 10, 11},  //up
+  {8, 10, 11},  //up
   {8, 9, 10},
 
   {12, 13, 14},
@@ -143,7 +143,7 @@ const int cube_indexes[12][3] =
   {16, 18, 19},  //right
   {20, 21, 22},
   {20, 22, 23},   //left
-
+  
   {0, 1, 2},
   {0, 2, 3},  //font
   {4, 5, 6},
@@ -172,8 +172,9 @@ App::App(int width, int height)
 	m_pRender->SetViewPortSize(m_iWindowWidht, m_iWindowHeight);
   m_pCamera = new Camera;
   m_pCamera->ResetViewMat();
-  //m_pCamera->LookAt(1, 1, 1, 0, 1, 0, 0, 0, 0);
-  m_pCamera->LookAt(1.85f, 2.32f, -1.93f, 0, 1, 0, 0, 0, 0);
+  m_pCamera->LookAt(2, 2, 2, 0, 1, 0, 0, 0, 0);
+  //m_pCamera->LookAt(1.85f, 2.32f, -1.93f, 0, 1, 0, 0, 0, 0);
+  //m_pCamera->LookAt(0.014, 3.609, 0.632, 0.707, 0.143, -0.69, 0, 0, 0);
   m_pCamera->ResetProjMat();
   m_pCamera->PerspectiveProj(90, 1, 1, 10);
   m_pRender->SetModelViewMat(m_pCamera->GetViewMat());
@@ -221,7 +222,7 @@ void App::Update(float delta)
 
   m_pRender->SetModelViewMat(m_pCamera->GetViewMat());
 
-  m_pRender->DrawTriangle(1);
+  m_pRender->DrawTriangle(12);
 	glDrawPixels(600, 600, GL_RGB, GL_UNSIGNED_BYTE, 
 		m_pRender->GetCurSceneFrameBuffer()->GetFrameBufferData());
 
