@@ -122,6 +122,8 @@ void Render::DrawTriangle(int count)
         if(m_pTexture)
         {
           m_pTexture->GetRGBA(out_point->texcoord.x, out_point->texcoord.y, &r, &g, &b, &a);
+          //m_pSceneFrameBuffer->SetBufferDataRGB(out_point->vertex.x, out_point->vertex.y, 
+          //  out_point->texcoord.x * 255, out_point->texcoord.y * 255, 0);
           m_pSceneFrameBuffer->SetBufferDataRGB(out_point->vertex.x, out_point->vertex.y, 
             r, g, b);
           if(r != 0)

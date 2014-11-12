@@ -282,8 +282,8 @@ void Raster::rasteriseUpTriangle( float x0, float y0, float x1, float y1, float 
                                   int other_count, float *others0, float *others1, float *others2, 
                                   OutPointPackage* out_point_package )
 {
-  float k_01_inv = (x1 - x0) / (y1 - y0);
-  float k_02_inv = (x2 - x0) / (y2 - y0);
+  float k_01_inv = (x1 - x0) / (int(y1) - int(y0));
+  float k_02_inv = (x2 - x0) / (int(y2) - int(y0));
   float xstart_01 = x0, xstart_02 = x0;
 
   float other_01y_start[10];
@@ -336,6 +336,8 @@ void Raster::rasteriseUpTriangle( float x0, float y0, float x1, float y1, float 
 #ifdef PERSPECTIVE_TEXTURE
       point.vertex.z = 1.0f / other_x_start[0];
       point.texcoord.x *= point.vertex.z; point.texcoord.y *= point.vertex.z;
+      //if(y == int(y1))
+        //printf("\npos:%d,%d,%f, ts:%f,%f", x, y, point.vertex.z, point.texcoord.x, point.texcoord.y);
 #endif
       memcpy(&point.color, other_x_start + 3, sizeof(float) * 4);
       out_point_package->AddPoint(point);
@@ -356,8 +358,8 @@ void Raster::rasteriseDownTriangle( float x0, float y0, float x1, float y1, floa
                                     int other_count, float *others0, float *others1, float *others2, 
                                     OutPointPackage* out_point_package )
 {
-  float k_10_inv = (x0 - x1) / (y0 - y1);
-  float k_20_inv = (x0 - x2) / (y0 - y2);
+  float k_10_inv = (x0 - x1) / (int(y0) - int(y1));
+  float k_20_inv = (x0 - x2) / (int(y0) - int(y2));
   float xstart_10 = x1, xstart_20 = x2;
 
   float other_10y_start[10];
@@ -406,7 +408,8 @@ void Raster::rasteriseDownTriangle( float x0, float y0, float x1, float y1, floa
 #ifdef PERSPECTIVE_TEXTURE
       point.vertex.z = 1.0f / other_x_start[0];
       point.texcoord.x *= point.vertex.z; point.texcoord.y *= point.vertex.z;
-      //printf("\npos:(%d,%d), st(%f,%f)", x, y, point.texcoord.x, point.texcoord.y);
+      //if(y == int(y1))
+      //  printf("\npos:%d,%d,%f, ts:%f,%f", x, y, point.vertex.z, point.texcoord.x, point.texcoord.y);
 #endif
       memcpy(&point.color, other_x_start + 3, sizeof(float) * 4);
       out_point_package->AddPoint(point);

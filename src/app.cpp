@@ -173,8 +173,10 @@ App::App(int width, int height)
   m_pCamera = new Camera;
   m_pCamera->ResetViewMat();
   m_pCamera->LookAt(2, 2, 2, 0, 1, 0, 0, 0, 0);
-  //m_pCamera->LookAt(1.85f, 2.32f, -1.93f, 0, 1, 0, 0, 0, 0);
+  //m_pCamera->LookAt(1.85f * 1.5f, 3.32f * 1.5f, -1.93f * 1.5f, 0, 1, 0, 0, 0, 0);
   //m_pCamera->LookAt(0.014, 3.609, 0.632, 0.707, 0.143, -0.69, 0, 0, 0);
+  //m_pCamera->LookAt(-3.4277, 0.5803, 0.8342, -0.0907, 0.6735, -0.7335, 0, 0, 0);
+  //m_pCamera->LookAt(-3.4068, 0.5856, 0.9597, -0.0823, 0.6732, -0.7348, 0, 0, 0);
   m_pCamera->ResetProjMat();
   m_pCamera->PerspectiveProj(90, 1, 1, 10);
   m_pRender->SetModelViewMat(m_pCamera->GetViewMat());
