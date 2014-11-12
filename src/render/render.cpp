@@ -49,6 +49,7 @@ void Render::DrawTriangle(int count)
   int   *index_ptr = (int*)VertexDataCache::GetInstance()->GetVertexDataDataPtr(m_iVexIndexDataBuffer);
   float *color_ptr = (float*)VertexDataCache::GetInstance()->GetVertexDataDataPtr(m_iVexColorDataBuffer);
   float *texcod_ptr = (float*)VertexDataCache::GetInstance()->GetVertexDataDataPtr(m_iVexTexCoordDataBuffer);
+  float *normal_ptr = (float*)VertexDataCache::GetInstance()->GetVertexDataDataPtr(m_iVexNormalDataButtfer);
   VECTOR4D p0, p1, p2, rp0, rp1, rp2;
   //do vertex transform
 
@@ -69,6 +70,10 @@ void Render::DrawTriangle(int count)
     memcpy(&triangle->texcoords[0], texcod_ptr + index0 * 2, sizeof(float) * 2);
     memcpy(&triangle->texcoords[1], texcod_ptr + index1 * 2, sizeof(float) * 2);
     memcpy(&triangle->texcoords[2], texcod_ptr + index2 * 2, sizeof(float) * 2);
+
+    memcpy(&triangle->normals[0], normal_ptr + index0 * 3, sizeof(float) * 3);
+    memcpy(&triangle->normals[1], normal_ptr + index1 * 3, sizeof(float) * 3);
+    memcpy(&triangle->normals[2], normal_ptr + index2 * 3, sizeof(float) * 3);
 
     p0.w = 1.0f; p1.w = 1.0f; p2.w = 1.0f;
     Mat_Mul_VECTOR4D_4X4(&p0, &m_matMVP, &rp0);
@@ -107,6 +112,10 @@ void Render::DrawTriangle(int count)
 
   OutPoint* out_point = NULL; 
   uchar r, g, b, a;
+  //init light & eye
+  VECTOR3D v_light, v_l, v_n, v_l1, v_eye;
+  v_light.x = 3.0f; v_light.y = 3.0f; v_light.z = 3.0f;
+
   for(std::vector<OutPointPackage*>::iterator itr = out_point_packages.begin();
       itr != out_point_packages.end(); ++itr)
   {
@@ -126,8 +135,7 @@ void Render::DrawTriangle(int count)
           //  out_point->texcoord.x * 255, out_point->texcoord.y * 255, 0);
           m_pSceneFrameBuffer->SetBufferDataRGB(out_point->vertex.x, out_point->vertex.y, 
             r, g, b);
-          if(r != 0)
-            r = r;
+          //VECTOR3D_Sub(&v_light, &out_point->vertex)
         }
         else
         {

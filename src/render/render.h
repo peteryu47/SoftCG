@@ -35,6 +35,7 @@ public:
   void          SetModelViewMat(MATRIX4X4_PTR mat_view){MAT_COPY_4X4(mat_view, &m_matMView); Mat_Mul_4X4(&m_matMView, &m_matProj, &m_matMVP);}
   void          SetProjMat(MATRIX4X4_PTR mat_proj){MAT_COPY_4X4(mat_proj, &m_matProj); Mat_Mul_4X4(&m_matMView, &m_matProj, &m_matMVP);}
   void          SetTexture(Texture *texture){m_pTexture = texture;}
+  void          SetEye(VECTOR3D *eye){VECTOR3D_COPY(&m_vEye, eye);}
 
 public:
 	void			SetViewPortSize(int width, int height);
@@ -67,6 +68,8 @@ private:
   int       m_iVexIndexDataBuffer;
 
   Texture*  m_pTexture;
+
+  VECTOR3D  m_vEye;
 };
 
 }

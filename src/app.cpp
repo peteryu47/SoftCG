@@ -98,6 +98,39 @@ const float cube_vertexs[24][3] = {
   {-1.0f,  1.0f, -1.0f},   //2        //23
 };
 
+const float cube_normal[24][3] = 
+{
+  {0.0f, 0.0f, -1.0f}, //font
+  {0.0f, 0.0f, -1.0f},
+  {0.0f, 0.0f, -1.0f},
+  {0.0f, 0.0f, -1.0f},
+
+  {0.0f, 0.0f, 1.0f}, //back 
+  {0.0f, 0.0f, 1.0f},
+  {0.0f, 0.0f, 1.0f},
+  {0.0f, 0.0f, 1.0f},
+
+  {0.0f, 1.0f, 0.0f}, //up
+  {0.0f, 1.0f, 0.0f},
+  {0.0f, 1.0f, 0.0f},
+  {0.0f, 1.0f, 0.0f},
+
+  {0.0f, -1.0f, 0.0f}, //down 
+  {0.0f, -1.0f, 0.0f},
+  {0.0f, -1.0f, 0.0f},
+  {0.0f, -1.0f, 0.0f},
+
+  {1.0f, 0.0f, 0.0f}, //right
+  {1.0f, 0.0f, 0.0f},
+  {1.0f, 0.0f, 0.0f},
+  {1.0f, 0.0f, 0.0f},
+
+  {-1.0f, 0.0f, 0.0f}, //left
+  {-1.0f, 0.0f, 0.0f},
+  {-1.0f, 0.0f, 0.0f},
+  {-1.0f, 0.0f, 0.0f}
+};
+
 const float cube_texCod[24][2] = 
 {
   {1.0f, 1.0f}, //font
@@ -193,12 +226,16 @@ App::App(int width, int height)
   int texcod_buffer = VertexDataCache::GetInstance()->GenVertexDataBuffer();
   VertexDataCache::GetInstance()->BindVertexDataBufferData
     (texcod_buffer, kDataTypeFloat, 2, 24, (void*)cube_texCod);
+  int normal_buffer = VertexDataCache::GetInstance()->GenVertexDataBuffer();
+  VertexDataCache::GetInstance()->BindVertexDataBufferData
+    (normal_buffer, kDataTypeFloat, 3, 24, (void*)cube_normal);
   m_pRender->SetVexVexDataBuffer(vex_buffer);
   m_pRender->SetVexIndexDataBuffer(index_buffer);
   m_pRender->SetVexColorDataBuffer(color_buffer);
   m_pRender->SetVexTexCoordDataBuffer(texcod_buffer);
+  m_pRender->SetVexNormalDataBuffer(normal_buffer);
 
-  m_pTexture = render::TextureCache::GetInstance()->AddTexture("F:\\git\\SoftCG\\SoftCG\\res\\test.bmp");
+  m_pTexture = render::TextureCache::GetInstance()->AddTexture("F:\\Git\\SoftCG\\res\\test1.bmp");
   m_pRender->SetTexture(m_pTexture);
 }
 
@@ -223,9 +260,10 @@ void App::Update(float delta)
   QueryPerformanceCounter(&m_nBeginTime);
 
   m_pRender->SetModelViewMat(m_pCamera->GetViewMat());
+  m_pRender->SetEye(m_pCamera->GetPointEye());
 
   m_pRender->DrawTriangle(12);
-	glDrawPixels(600, 600, GL_RGB, GL_UNSIGNED_BYTE, 
+	glDrawPixels(600, 600, GL_BGR_EXT, GL_UNSIGNED_BYTE, 
 		m_pRender->GetCurSceneFrameBuffer()->GetFrameBufferData());
 
   QueryPerformanceCounter(&nEndTime);
