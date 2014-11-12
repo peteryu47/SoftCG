@@ -198,7 +198,7 @@ App::App(int width, int height)
   m_pRender->SetVexColorDataBuffer(color_buffer);
   m_pRender->SetVexTexCoordDataBuffer(texcod_buffer);
 
-  m_pTexture = render::TextureCache::GetInstance()->AddTexture("F:\\Git\\SoftCG\\res\\test.bmp");
+  m_pTexture = render::TextureCache::GetInstance()->AddTexture("F:\\git\\SoftCG\\SoftCG\\res\\test.bmp");
   m_pRender->SetTexture(m_pTexture);
 }
 
