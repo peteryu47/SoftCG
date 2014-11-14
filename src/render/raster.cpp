@@ -19,7 +19,7 @@ void Raster::PurgeInstace()
 
 }
 
-#define OTHER_COUNT 10
+#define OTHER_COUNT 13
 
 void Raster::Rasterise( const std::list<Triangle*> &triangles, std::vector<OutPointPackage*> &out_point_packges )
 {
@@ -33,14 +33,17 @@ void Raster::Rasterise( const std::list<Triangle*> &triangles, std::vector<OutPo
     memcpy(others0 + 1, &(*itr)->texcoords[0], sizeof(float) * 2);
     memcpy(others0 + 3, &(*itr)->colors[0], sizeof(float) * 4);
     memcpy(others0 + 7, &(*itr)->normals[0], sizeof(float) * 3);
+    memcpy(others0 + 10, &(*itr)->origin_vertexs[0], sizeof(float) * 3);
     others1[0] = (*itr)->vertexs[1].z;
     memcpy(others1 + 1, &(*itr)->texcoords[1], sizeof(float) * 2);
     memcpy(others1 + 3, &(*itr)->colors[1], sizeof(float) * 4);
     memcpy(others1 + 7, &(*itr)->normals[1], sizeof(float) * 3);
+    memcpy(others1 + 10, &(*itr)->origin_vertexs[1], sizeof(float) * 3);
     others2[0] = (*itr)->vertexs[2].z;
     memcpy(others2 + 1, &(*itr)->texcoords[2], sizeof(float) * 2);
     memcpy(others2 + 3, &(*itr)->colors[2], sizeof(float) * 4);
     memcpy(others2 + 7, &(*itr)->normals[2], sizeof(float) * 3);
+    memcpy(others2 + 10, &(*itr)->origin_vertexs[2], sizeof(float) * 3);
     int point_count = CalTriangleFitAreaPixelByPoint(      
       (*itr)->vertexs[0].x, 
       (*itr)->vertexs[0].y, 
@@ -290,12 +293,12 @@ void Raster::rasteriseUpTriangle( float x0, float y0, float x1, float y1, float 
   float k_02_inv = (x2 - x0) / (int(y2) - int(y0));
   float xstart_01 = x0, xstart_02 = x0;
 
-  float other_01y_start[10];
-  float other_02y_start[10];
-  float other_01y_step[10];
-  float other_02y_step[10];
-  float other_x_start[10];
-  float other_x_step[10];
+  float other_01y_start[OTHER_COUNT];
+  float other_02y_start[OTHER_COUNT];
+  float other_01y_step[OTHER_COUNT];
+  float other_02y_step[OTHER_COUNT];
+  float other_x_start[OTHER_COUNT];
+  float other_x_step[OTHER_COUNT];
 
   memcpy(other_01y_start, others0, sizeof(float) * other_count);
   memcpy(other_02y_start, others0, sizeof(float) * other_count);
@@ -339,6 +342,7 @@ void Raster::rasteriseUpTriangle( float x0, float y0, float x1, float y1, float 
       memcpy(&point.texcoord, other_x_start + 1, sizeof(float) * 2);
       //memcpy(&point.color, other_x_start + 3, sizeof(float) * 4);
       memcpy(&point.normal, other_x_start + 7, sizeof(float) * 3);
+      memcpy(&point.origin_vertex, other_x_start + 10, sizeof(float) * 3);
 #ifdef PERSPECTIVE_TEXTURE
       point.vertex.z = 1.0f / other_x_start[0];
       point.texcoord.x *= point.vertex.z; point.texcoord.y *= point.vertex.z;
@@ -368,12 +372,12 @@ void Raster::rasteriseDownTriangle( float x0, float y0, float x1, float y1, floa
   float k_20_inv = (x0 - x2) / (int(y0) - int(y2));
   float xstart_10 = x1, xstart_20 = x2;
 
-  float other_10y_start[10];
-  float other_20y_start[10];
-  float other_10y_step[10];
-  float other_20y_step[10];
-  float other_x_start[10];
-  float other_x_step[10];
+  float other_10y_start[OTHER_COUNT];
+  float other_20y_start[OTHER_COUNT];
+  float other_10y_step[OTHER_COUNT];
+  float other_20y_step[OTHER_COUNT];
+  float other_x_start[OTHER_COUNT];
+  float other_x_step[OTHER_COUNT];
 
   memcpy(other_10y_start, others1, sizeof(float) * other_count);
   memcpy(other_20y_start, others2, sizeof(float) * other_count);
@@ -413,6 +417,7 @@ void Raster::rasteriseDownTriangle( float x0, float y0, float x1, float y1, floa
       memcpy(&point.texcoord, other_x_start + 1, sizeof(float) * 2);
       //memcpy(&point.color, other_x_start + 3, sizeof(float) * 4);
       memcpy(&point.normal, other_x_start + 7, sizeof(float) * 3);
+      memcpy(&point.origin_vertex, other_x_start + 10, sizeof(float) * 3);
 #ifdef PERSPECTIVE_TEXTURE
       point.vertex.z = 1.0f / other_x_start[0];
       point.texcoord.x *= point.vertex.z; point.texcoord.y *= point.vertex.z;

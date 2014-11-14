@@ -20,6 +20,7 @@ struct Triangle
   VECTOR4D      colors[3];
   VECTOR2D      texcoords[3]; 
   VECTOR3D      normals[3];
+  VECTOR3D      origin_vertexs[3];
 };
 
 struct OutPoint
@@ -30,12 +31,14 @@ struct OutPoint
     VECTOR4D_COPY(&color, &(point.color));
     VECTOR2D_COPY(&texcoord, &(point.texcoord));
     VECTOR3D_COPY(&normal, &(point.normal));
+    VECTOR3D_COPY(&origin_vertex, &(point.origin_vertex));
     return *this;
   }
   VECTOR3D    vertex;
   VECTOR4D    color;
   VECTOR2D    texcoord;
   VECTOR3D    normal;
+  VECTOR3D    origin_vertex;
 };
 
 class OutPointPackage

@@ -75,6 +75,10 @@ void Render::DrawTriangle(int count)
     memcpy(&triangle->normals[1], normal_ptr + index1 * 3, sizeof(float) * 3);
     memcpy(&triangle->normals[2], normal_ptr + index2 * 3, sizeof(float) * 3);
 
+    memcpy(&triangle->origin_vertexs[0], vex_ptr + index0 * 3, sizeof(float) * 3);
+    memcpy(&triangle->origin_vertexs[1], vex_ptr + index1 * 3, sizeof(float) * 3);
+    memcpy(&triangle->origin_vertexs[2], vex_ptr + index2 * 3, sizeof(float) * 3);
+
     p0.w = 1.0f; p1.w = 1.0f; p2.w = 1.0f;
     Mat_Mul_VECTOR4D_4X4(&p0, &m_matMVP, &rp0);
     Mat_Mul_VECTOR4D_4X4(&p1, &m_matMVP, &rp1);
@@ -113,8 +117,12 @@ void Render::DrawTriangle(int count)
   OutPoint* out_point = NULL; 
   uchar r, g, b, a;
   //init light & eye
-  VECTOR3D v_light, v_l, v_n, v_l1, v_eye;
+  VECTOR3D v_light, v_l, v_n, v_l1, v_eye, v_t;
+  float reflect, highlight;
+  VECTOR3D c_light_color;
+
   v_light.x = 3.0f; v_light.y = 3.0f; v_light.z = 3.0f;
+  c_light_color.x = 1.0f; c_light_color.y = 0.8f; c_light_color.z = 0.7f;
 
   for(std::vector<OutPointPackage*>::iterator itr = out_point_packages.begin();
       itr != out_point_packages.end(); ++itr)
@@ -133,9 +141,24 @@ void Render::DrawTriangle(int count)
           m_pTexture->GetRGBA(out_point->texcoord.x, out_point->texcoord.y, &r, &g, &b, &a);
           //m_pSceneFrameBuffer->SetBufferDataRGB(out_point->vertex.x, out_point->vertex.y, 
           //  out_point->texcoord.x * 255, out_point->texcoord.y * 255, 0);
+          
+          VECTOR3D_Sub(&v_light, &out_point->origin_vertex, &v_l);
+          VECTOR3D_Normalize(&v_l);
+          VECTOR3D_Normalize(&out_point->normal);
+          VECTOR3D_Scale(VECTOR3D_Dot(&v_l, &out_point->normal) * 2, &out_point->normal, &v_t);
+          VECTOR3D_Sub(&v_t, &v_l, &v_l1);
+          VECTOR3D_Sub(&m_vEye, &out_point->origin_vertex, &v_eye);
+          VECTOR3D_Normalize(&v_eye);
+          reflect = VECTOR3D_Dot(&v_eye, &out_point->normal);
+          if(reflect < 0.0f)
+            reflect = 0.0f;
+          highlight = VECTOR3D_Dot(&v_l1, &v_eye);
+          r = uchar(r * c_light_color.x * reflect + 60.0f);
+          g = uchar(g * c_light_color.y * reflect + 60.0f);
+          b = uchar(b * c_light_color.z * reflect + 60.0f);
+
           m_pSceneFrameBuffer->SetBufferDataRGB(out_point->vertex.x, out_point->vertex.y, 
             r, g, b);
-          //VECTOR3D_Sub(&v_light, &out_point->vertex)
         }
         else
         {
