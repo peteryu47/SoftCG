@@ -100,6 +100,7 @@ const float cube_vertexs[24][3] = {
 
 const float cube_normal[24][3] = 
 {
+  /*
   {0.0f, 0.0f, -1.0f}, //font
   {0.0f, 0.0f, -1.0f},
   {0.0f, 0.0f, -1.0f},
@@ -129,6 +130,36 @@ const float cube_normal[24][3] =
   {-1.0f, 0.0f, 0.0f},
   {-1.0f, 0.0f, 0.0f},
   {-1.0f, 0.0f, 0.0f}
+  */
+  { 1.0f,  1.0f, -1.0f},   //3 font   //0
+  {-1.0f,  1.0f, -1.0f},   //2        //1
+  {-1.0f, -1.0f, -1.0f},   //6        //2
+  { 1.0f, -1.0f, -1.0f},   //7        //3
+
+  { 1.0f,  1.0f,  1.0f},   //0 back   //4
+  { 1.0f, -1.0f,  1.0f},   //4        //5
+  {-1.0f, -1.0f,  1.0f},   //5        //6
+  {-1.0f,  1.0f,  1.0f},   //1        //7
+
+  { 1.0f,  1.0f,  1.0f},   //0 up     //8
+  {-1.0f,  1.0f,  1.0f},   //1        //9
+  {-1.0f,  1.0f, -1.0f},   //2        //10
+  { 1.0f,  1.0f, -1.0f},   //3        //11
+
+  { 1.0f, -1.0f,  1.0f},   //4 down   //12
+  { 1.0f, -1.0f, -1.0f},   //7        //13
+  {-1.0f, -1.0f, -1.0f},   //6        //14
+  {-1.0f, -1.0f,  1.0f},   //5        //15
+
+  { 1.0f,  1.0f,  1.0f},   //0 right  //16
+  { 1.0f,  1.0f, -1.0f},   //3        //17
+  { 1.0f, -1.0f, -1.0f},   //7        //18
+  { 1.0f, -1.0f,  1.0f},   //4        //19
+
+  {-1.0f,  1.0f,  1.0f},   //1 left   //20
+  {-1.0f, -1.0f,  1.0f},   //5        //21
+  {-1.0f, -1.0f, -1.0f},   //6        //22
+  {-1.0f,  1.0f, -1.0f},   //2        //23
 };
 
 const float cube_texCod[24][2] = 
@@ -235,7 +266,7 @@ App::App(int width, int height)
   m_pRender->SetVexTexCoordDataBuffer(texcod_buffer);
   m_pRender->SetVexNormalDataBuffer(normal_buffer);
 
-  m_pTexture = render::TextureCache::GetInstance()->AddTexture("F:\\Git\\SoftCG\\res\\test.bmp");
+  m_pTexture = render::TextureCache::GetInstance()->AddTexture("F:\\Git\\SoftCG\\res\\test1.bmp");
   m_pRender->SetTexture(m_pTexture);
 }
 
